@@ -1,0 +1,141 @@
+﻿@using BibliotecaCarvalhoPereira.Models
+
+<!-- Seção: Informações Básicas -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Informações Básicas</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Título</label>
+                <InputText @bind-Value="Livro.Titulo" class="form-control" placeholder="Digite o título do livro." />
+                <ValidationMessage For="@(() => Livro.Titulo)" class="text-danger small" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Subtítulo</label>
+                <InputText @bind-Value="Livro.Subtitulo" class="form-control" placeholder="Subtítulo (opcional)." />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">ISBN</label>
+                <InputText @bind-Value="Livro.ISBN" class="form-control" placeholder="978-0000000000" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">EAN</label>
+                <InputText @bind-Value="Livro.EAN" class="form-control" placeholder="Código EAN" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Formato</label>
+                <InputSelect @bind-Value="Livro.Formato" class="form-select">
+                    @foreach (var f in OpcoesFormulario.Formato)
+                    {
+                        <option>@f</option>
+                    }
+                </InputSelect>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seção: Autoria e Classificação -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Autoria e Classificação</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">Autor(es)</label>
+                <InputText @bind-Value="Livro.Autor" class="form-control" placeholder="Nome do autor(es)." />
+                <ValidationMessage For="@(() => Livro.Autor)" class="text-danger small" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Idioma</label>
+                <InputSelect @bind-Value="Livro.Idioma" class="form-select">
+                    @foreach (var i in OpcoesFormulario.Idioma)
+                    {
+                        <option>@i</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">Assunto</label>
+                <InputText @bind-Value="Livro.Assunto" class="form-control" placeholder="Assunto." />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Género</label>
+                <InputSelect @bind-Value="Livro.Genero" class="form-select">
+                    @foreach (var g in OpcoesFormulario.Genero)
+                    {
+                        <option>@g</option>
+                    }
+                </InputSelect>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seção: Publicação -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Dados de Publicação</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-md-7">
+                <label class="form-label fw-semibold">Editora</label>
+                <InputText @bind-Value="Livro.Editora" class="form-control" placeholder="Nome da editora." />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Edição</label>
+                <InputText @bind-Value="Livro.Edicao" class="form-control" placeholder="1ª" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Data de Publicação</label>
+                <InputDate @bind-Value="Livro.DataDePublicacao" class="form-control" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seção: Descrição -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Descrição e Observações</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-12">
+                <label class="form-label fw-semibold">Descrição</label>
+                <InputTextArea @bind-Value="Livro.Descricao" class="form-control" rows="4"
+                               placeholder="Sinopse ou descrição do conteúdo do livro..." />
+            </div>
+
+            <div class="col-12">
+                <label class="form-label fw-semibold">Observações</label>
+                <InputTextArea @bind-Value="Livro.Observacao" class="form-control" rows="3"
+                               placeholder="Observações adicionais, estado do livro, entre outras..." />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public Livro Livro { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        if (Livro.DataDePublicacao == default(DateOnly)) 
+            Livro.DataDePublicacao = DateOnly.FromDateTime(DateTime.Today);
+    }
+}

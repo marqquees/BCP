@@ -1,0 +1,119 @@
+@page "/editar/{id:int}"
+@rendermode InteractiveServer
+
+@using BibliotecaCarvalhoPereira.Components.Pages.Share
+@using BibliotecaCarvalhoPereira.Models
+@using BibliotecaCarvalhoPereira.Services
+
+@inject LivroService LivroService
+@inject NavigationManager Navigation
+
+<PageTitle>Editar Livro</PageTitle>
+
+@if (_livro == null)
+{
+    <p><em>Carregando...</em></p>
+}
+else
+{
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-11 col-xl-12">
+                <div class="mb-4">
+                    <h1 class="h3 mb-2">Editar Livro</h1>
+                    <p class="text-muted">Atualize as informações do livro <strong>@_livro.Titulo</strong></p>
+                </div>
+
+                <EditForm Model="_livro" OnValidSubmit="Salvar" FormName="editarLivroForm" class="needs-validation">
+                    <DataAnnotationsValidator />
+
+                    <Formulario Livro="_livro" />
+
+                    <!-- Botões de Ação -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary" @onclick="Cancelar">
+                                    <i class="bi bi-arrow-left"></i> Cancelar
+                                </button>
+
+                                <button type="submit" class="btn btn-success" disabled="@_salvar">
+                                    @if (_salvar)
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        <span>Atualizando...</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-check-circle"></i>
+                                        <span>Atualizar</span>
+                                    }
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}
+
+<Alerta Mensagem="@_mensagem" Sucesso="@_sucesso" />
+
+@code {
+    [Parameter] public int Id { get; set; }
+    
+    private Livro? _livro;
+    private string? _mensagem;
+    private bool _salvar;
+    private bool _sucesso;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _livro = await LivroService.BuscarPorIdAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            _mensagem = $"Erro ao carregar livro: {ex.Message}";
+            _sucesso = false;
+        }
+    }
+
+    private async Task Salvar()
+    {
+        if (_livro == null) return;
+
+        try
+        {
+            _salvar = true;
+            
+            await LivroService.AtualizarAsync(_livro);
+
+            _mensagem = $"Livro {_livro.Titulo} atualizado com sucesso!";
+            _sucesso = true;
+            
+            // Redirecionar após 2 segundos.
+            await Task.Delay(2000);
+            Navigation.NavigateTo("/lista-de-livros");
+        }
+        catch (Exception erro)
+        {
+            _mensagem = $"Erro ao atualizar o livro: {erro.Message}";
+            _sucesso = false;
+        }
+        finally
+        {
+            _salvar = false;
+            StateHasChanged();
+            await Task.Delay(5000);
+            _mensagem = string.Empty;
+        }    
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/lista-de-livros");
+    }
+}

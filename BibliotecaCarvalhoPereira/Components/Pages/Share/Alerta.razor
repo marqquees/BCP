@@ -1,0 +1,25 @@
+@if (!string.IsNullOrEmpty(_mensagem))
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast show @(_sucesso ? "bg-success" : "bg-danger") text-white" role="alert">
+            <div class="toast-body">
+                <i class="bi @(_sucesso ? "bi-check-circle" : "bi-exclamation-triangle")"></i>
+                @_mensagem
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? Mensagem { get; set; }
+    [Parameter] public bool Sucesso { get; set; }
+
+    private string? _mensagem;
+    private bool _sucesso;
+    
+    protected override void OnParametersSet()
+    {
+        _mensagem = Mensagem;
+        _sucesso = Sucesso;
+    }
+}
