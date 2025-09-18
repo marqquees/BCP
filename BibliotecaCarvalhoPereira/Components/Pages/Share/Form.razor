@@ -9,31 +9,31 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Título</label>
-                <InputText @bind-Value="Livro.Titulo" class="form-control" placeholder="Digite o título do livro." />
-                <ValidationMessage For="@(() => Livro.Titulo)" class="text-danger small" />
+                <InputText @bind-Value="Book.Title" class="form-control" placeholder="Digite o título do livro." />
+                <ValidationMessage For="@(() => Book.Title)" class="text-danger small" />
             </div>
 
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Subtítulo</label>
-                <InputText @bind-Value="Livro.Subtitulo" class="form-control" placeholder="Subtítulo (opcional)." />
+                <InputText @bind-Value="Book.Subtitle" class="form-control" placeholder="Subtítulo (opcional)." />
             </div>
 
             <div class="col-md-4">
                 <label class="form-label fw-semibold">ISBN</label>
-                <InputText @bind-Value="Livro.ISBN" class="form-control" placeholder="978-0000000000" />
+                <InputText @bind-Value="Book.ISBN" class="form-control" placeholder="978-0000000000" />
             </div>
 
             <div class="col-md-4">
                 <label class="form-label fw-semibold">EAN</label>
-                <InputText @bind-Value="Livro.EAN" class="form-control" placeholder="Código EAN" />
+                <InputText @bind-Value="Book.EAN" class="form-control" placeholder="Código EAN" />
             </div>
 
             <div class="col-md-4">
                 <label class="form-label fw-semibold">Formato</label>
-                <InputSelect @bind-Value="Livro.Formato" class="form-select">
-                    @foreach (var f in OpcoesFormulario.Formato)
+                <InputSelect @bind-Value="Book.Format" class="form-select">
+                    @foreach (var format in OptionForm.Format)
                     {
-                        <option>@f</option>
+                        <option>@format</option>
                     }
                 </InputSelect>
             </div>
@@ -50,31 +50,31 @@
         <div class="row g-4">
             <div class="col-md-8">
                 <label class="form-label fw-semibold">Autor(es)</label>
-                <InputText @bind-Value="Livro.Autor" class="form-control" placeholder="Nome do autor(es)." />
-                <ValidationMessage For="@(() => Livro.Autor)" class="text-danger small" />
+                <InputText @bind-Value="Book.Author" class="form-control" placeholder="Nome do autor(es)." />
+                <ValidationMessage For="@(() => Book.Author)" class="text-danger small" />
             </div>
 
             <div class="col-md-4">
                 <label class="form-label fw-semibold">Idioma</label>
-                <InputSelect @bind-Value="Livro.Idioma" class="form-select">
-                    @foreach (var i in OpcoesFormulario.Idioma)
+                <InputSelect @bind-Value="Book.Language" class="form-select">
+                    @foreach (var language in OptionForm.Language)
                     {
-                        <option>@i</option>
+                        <option>@language</option>
                     }
                 </InputSelect>
             </div>
 
             <div class="col-md-8">
                 <label class="form-label fw-semibold">Assunto</label>
-                <InputText @bind-Value="Livro.Assunto" class="form-control" placeholder="Assunto." />
+                <InputText @bind-Value="Book.Subject" class="form-control" placeholder="Assunto." />
             </div>
 
             <div class="col-md-4">
                 <label class="form-label fw-semibold">Género</label>
-                <InputSelect @bind-Value="Livro.Genero" class="form-select">
-                    @foreach (var g in OpcoesFormulario.Genero)
+                <InputSelect @bind-Value="Book.Gender" class="form-select">
+                    @foreach (var gender in OptionForm.Gender)
                     {
-                        <option>@g</option>
+                        <option>@gender</option>
                     }
                 </InputSelect>
             </div>
@@ -91,17 +91,17 @@
         <div class="row g-4">
             <div class="col-md-7">
                 <label class="form-label fw-semibold">Editora</label>
-                <InputText @bind-Value="Livro.Editora" class="form-control" placeholder="Nome da editora." />
+                <InputText @bind-Value="Book.Publisher" class="form-control" placeholder="Nome da editora." />
             </div>
 
             <div class="col-md-2">
                 <label class="form-label fw-semibold">Edição</label>
-                <InputText @bind-Value="Livro.Edicao" class="form-control" placeholder="1ª" />
+                <InputText @bind-Value="Book.Edition" class="form-control" placeholder="1ª" />
             </div>
 
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Data de Publicação</label>
-                <InputDate @bind-Value="Livro.DataDePublicacao" class="form-control" />
+                <InputDate @bind-Value="Book.PublicationDate" class="form-control" />
             </div>
         </div>
     </div>
@@ -116,26 +116,27 @@
         <div class="row g-4">
             <div class="col-12">
                 <label class="form-label fw-semibold">Descrição</label>
-                <InputTextArea @bind-Value="Livro.Descricao" class="form-control" rows="4"
-                               placeholder="Sinopse ou descrição do conteúdo do livro..." />
+                <InputTextArea class="form-control" rows="4" 
+                                @bind-Value="Book.Description"
+                                placeholder="Sinopse ou descrição do conteúdo do livro..." />
             </div>
 
             <div class="col-12">
                 <label class="form-label fw-semibold">Observações</label>
-                <InputTextArea @bind-Value="Livro.Observacao" class="form-control" rows="3"
-                               placeholder="Observações adicionais, estado do livro, entre outras..." />
+                <InputTextArea class="form-control" rows="3" 
+                                @bind-Value="Book.Note"
+                                placeholder="Observações adicionais, estado do livro, entre outras..." />
             </div>
         </div>
     </div>
 </div>
 
 @code {
-
-    [Parameter] public Livro Livro { get; set; } = new();
+    [Parameter] public Book Book { get; set; } = new();
 
     protected override void OnInitialized()
     {
-        if (Livro.DataDePublicacao == default(DateOnly)) 
-            Livro.DataDePublicacao = DateOnly.FromDateTime(DateTime.Today);
+        if (Book.PublicationDate == default(DateOnly)) 
+            Book.PublicationDate = DateOnly.FromDateTime(DateTime.Today);
     }
 }

@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<LivroContext>(options => 
+builder.Services.AddDbContext<BookContext>(options => 
 options.UseMySql(
     builder.Configuration.GetConnectionString("ConexaoBD") ?? 
         throw new InvalidOperationException("A string de conexão não foi configurada corretamente."),
@@ -17,7 +17,7 @@ options.UseMySql(
     ));
 
 // Configura o serviço de injeção de dependência para LivroRepository.
-builder.Services.AddScoped<LivroService>();
+builder.Services.AddScoped<BookOperation>();
 
 var app = builder.Build();
 

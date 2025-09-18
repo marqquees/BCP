@@ -4,16 +4,19 @@ using BibliotecaCarvalhoPereira.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace BibliotecaCarvalhoPereira.Migrations
 {
-    [DbContext(typeof(LivroContext))]
-    partial class LivroContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BookContext))]
+    [Migration("20250918093834_BCP1")]
+    partial class BCP1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace BibliotecaCarvalhoPereira.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("BibliotecaCarvalhoPereira.Models.Livro", b =>
+            modelBuilder.Entity("BibliotecaCarvalhoPereira.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,53 +33,53 @@ namespace BibliotecaCarvalhoPereira.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Assunto")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Autor")
+                    b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateOnly>("DataDePublicacao")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Descricao")
+                    b.Property<string>("Description")
                         .HasColumnType("longtext");
 
                     b.Property<string>("EAN")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Edicao")
+                    b.Property<string>("Edition")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Editora")
+                    b.Property<string>("Format")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Formato")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Genero")
+                    b.Property<string>("Gender")
                         .HasColumnType("longtext");
 
                     b.Property<string>("ISBN")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Idioma")
+                    b.Property<string>("Language")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Observacao")
+                    b.Property<string>("Note")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Subtitulo")
+                    b.Property<DateOnly>("PublicationDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Publisher")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Titulo")
+                    b.Property<string>("Subject")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Subtitle")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Livros");
+                    b.ToTable("Books");
                 });
 #pragma warning restore 612, 618
         }

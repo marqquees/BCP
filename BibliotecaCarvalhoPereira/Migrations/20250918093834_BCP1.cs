@@ -15,7 +15,7 @@ namespace BibliotecaCarvalhoPereira.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Livros",
+                name: "Books",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -24,33 +24,33 @@ namespace BibliotecaCarvalhoPereira.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EAN = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Titulo = table.Column<string>(type: "longtext", nullable: false)
+                    Title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Assunto = table.Column<string>(type: "longtext", nullable: true)
+                    Subject = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Subtitulo = table.Column<string>(type: "longtext", nullable: true)
+                    Subtitle = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Edicao = table.Column<string>(type: "longtext", nullable: true)
+                    Edition = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Autor = table.Column<string>(type: "longtext", nullable: false)
+                    Author = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Genero = table.Column<string>(type: "longtext", nullable: true)
+                    Gender = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Editora = table.Column<string>(type: "longtext", nullable: true)
+                    Publisher = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataDePublicacao = table.Column<DateOnly>(type: "date", nullable: false),
-                    Idioma = table.Column<string>(type: "longtext", nullable: true)
+                    PublicationDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Language = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Formato = table.Column<string>(type: "longtext", nullable: true)
+                    Format = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descricao = table.Column<string>(type: "longtext", nullable: true)
+                    Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Observacao = table.Column<string>(type: "longtext", nullable: true)
+                    Note = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Livros", x => x.Id);
+                    table.PrimaryKey("PK_Books", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -59,7 +59,7 @@ namespace BibliotecaCarvalhoPereira.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Livros");
+                name: "Books");
         }
     }
 }

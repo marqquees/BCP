@@ -5,7 +5,7 @@
 @using BibliotecaCarvalhoPereira.Models
 @using BibliotecaCarvalhoPereira.Services
 
-@inject LivroService LivroService
+@inject BookOperation Operation
 
 <PageTitle>Adicionar Livro</PageTitle>
 
@@ -18,21 +18,21 @@
                 <p class="text-muted">Preencha as informações do livro para adicioná-lo à biblioteca.</p>
             </div> *@
 
-            <EditForm Model="_livro" OnValidSubmit="Salvar" FormName="adicionarLivroForm" class="needs-validation">
+            <EditForm Model="_book" OnValidSubmit="SubmitAddBook" FormName="adicionarLivroForm" class="needs-validation">
                 <DataAnnotationsValidator />
 
-                <Formulario Livro="_livro" />
+                <Form Book="_book" />
 
                 <!-- Botões de Ação -->
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex gap-2 justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary" @onclick="Limpar">
+                            <button type="button" class="btn btn-outline-secondary" @onclick="ClearForm">
                                 <i class="bi bi-x-circle"></i> Limpar
                             </button>
 
-                            <button type="submit" class="btn btn-primary" disabled="@_salvar">
-                                @if (_salvar)
+                            <button type="submit" class="btn btn-primary" disabled="@_save">
+                                @if (_save)
                                 {
                                     <span class="spinner-border spinner-border-sm me-2" role="status"></span>
                                     <span>Salvando...</span>
@@ -50,44 +50,44 @@
     </div>
 </div>
 
-<Alerta Mensagem="@_mensagem" Sucesso="@_sucesso" />
+<InfoModal Message="@_message" Success="@_success" />
 
 @code {
-    private Livro _livro = new();
-    private string? _mensagem;
-    private bool _salvar;
-    private bool _sucesso;
+    private Book _book = new();
+    private string? _message;
+    private bool _save;
+    private bool _success;
 
-    private async Task Salvar()
+    private async Task SubmitAddBook()
     {
         try
         {
-            _salvar = true;
+            _save = true;
 
-            await LivroService.AdicionarAsync(_livro);
+            await Operation.AddBookAsync(_book);
 
-            _mensagem = $"Livro {_livro.Titulo} adicionado com sucesso!";
-            _sucesso = true;
+            _message = $"Livro {_book.Title} adicionado com sucesso!";
+            _success = true;
             
-            Limpar();
+            ClearForm();
         }
         catch (Exception erro)
         {
-            _mensagem = $"Erro ao adicionar o livro: {erro.Message}";
-            _sucesso = false;
+            _message = $"Erro ao adicionar o livro: {erro.Message}";
+            _success = false;
         }
         finally
         {
-            _salvar = false;
+            _save = false;
             StateHasChanged();
             await Task.Delay(3000);
-            _mensagem = string.Empty;
+            _message = string.Empty;
         }    
     }
 
-    private void Limpar()
+    private void ClearForm()
     {
-        _livro = new Livro();
+        _book = new Book();
         StateHasChanged();
     }
 }
