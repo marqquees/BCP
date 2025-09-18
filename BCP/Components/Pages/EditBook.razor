@@ -1,9 +1,9 @@
 @page "/editar/{id:int}"
 @rendermode InteractiveServer
 
-@using BibliotecaCarvalhoPereira.Components.Pages.Share
-@using BibliotecaCarvalhoPereira.Models
-@using BibliotecaCarvalhoPereira.Services
+@using BCP.Components.Pages.Share
+@using BCP.Models
+@using BCP.Services
 
 @inject BookOperation Operation
 @inject NavigationManager Navigation
@@ -24,7 +24,7 @@ else
                     <p class="text-muted">Atualize as informações do livro <strong>@_book.Title</strong></p>
                 </div>
 
-                <EditForm Model="_book" OnValidSubmit="UpdateBook" FormName="editarLivroForm" class="needs-validation">
+                <EditForm Model="_book" OnValidSubmit="UpdateBook" FormName="editBookForm" class="needs-validation">
                     <DataAnnotationsValidator />
 
                     <Form Book="_book" />

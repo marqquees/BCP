@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BibliotecaCarvalhoPereira.Migrations
+namespace BCP.Migrations
 {
     /// <inheritdoc />
     public partial class BCP1 : Migration

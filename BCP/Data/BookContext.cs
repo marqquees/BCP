@@ -1,7 +1,7 @@
-﻿using BibliotecaCarvalhoPereira.Models;
+﻿using BCP.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BibliotecaCarvalhoPereira.Data
+namespace BCP.Data
 {
     public class BookContext(DbContextOptions<BookContext> opcoes) : DbContext(opcoes)
     {

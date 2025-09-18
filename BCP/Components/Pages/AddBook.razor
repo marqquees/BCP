@@ -1,9 +1,9 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 
-@using BibliotecaCarvalhoPereira.Components.Pages.Share
-@using BibliotecaCarvalhoPereira.Models
-@using BibliotecaCarvalhoPereira.Services
+@using BCP.Components.Pages.Share
+@using BCP.Models
+@using BCP.Services
 
 @inject BookOperation Operation
 
@@ -12,13 +12,7 @@
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-12">
-            <!-- Cabeçalho da página -->
-            @* <div class="mb-4">
-                <h1 class="h3 mb-2">Adicionar Livro</h1>
-                <p class="text-muted">Preencha as informações do livro para adicioná-lo à biblioteca.</p>
-            </div> *@
-
-            <EditForm Model="_book" OnValidSubmit="SubmitAddBook" FormName="adicionarLivroForm" class="needs-validation">
+            <EditForm Model="_book" OnValidSubmit="SubmitAddBook" FormName="addBookForm" class="needs-validation">
                 <DataAnnotationsValidator />
 
                 <Form Book="_book" />

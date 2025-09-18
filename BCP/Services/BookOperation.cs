@@ -1,10 +1,10 @@
-﻿using BibliotecaCarvalhoPereira.Data;
-using BibliotecaCarvalhoPereira.Models;
+﻿using BCP.Data;
+using BCP.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Data.Common;
 
-namespace BibliotecaCarvalhoPereira.Services
+namespace BCP.Services
 {
     public class BookOperation(BookContext context, ILogger<BookOperation> logger)
     {

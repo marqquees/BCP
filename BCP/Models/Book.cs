@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BibliotecaCarvalhoPereira.Models
+namespace BCP.Models
 {
     public class Book
     {
@@ -14,7 +14,7 @@ namespace BibliotecaCarvalhoPereira.Models
         public string? Subject { get; set; }
         public string? Subtitle { get; set; }
         public string? Edition { get; set; }
-        
+
         [Required(ErrorMessage = "Este campo é obrigatório.")]
         public string? Author { get; set; }
         public string? Gender { get; set; }

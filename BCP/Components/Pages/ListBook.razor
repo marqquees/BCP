@@ -1,0 +1,151 @@
+﻿@page "/lista-de-livros"
+@rendermode InteractiveServer
+
+@using BCP.Components.Pages.Share
+@using BCP.Models
+@using BCP.Services
+
+@inject BookOperation Operation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Lista de Livro(s)</PageTitle>
+
+<div class="container-fluid py-4">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">
+                Livros Registados
+                <span class="badge bg-light text-primary ms-1">@_book.Count</span>
+            </h6>
+
+            <div>
+                <input type="text" class="form-control" placeholder="pesquisar..."
+                       @bind-value="_searchTerm" @bind-value:event="oninput" @onkeyup="FilterBook" />
+            </div>
+        </div>
+
+        @if (!_book.Any())
+        {
+            <div class="alert alert-info" role="alert">
+                Nenhum livro registado.
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>Assunto</th>
+                            <th>Idioma</th>
+                            <th>Gênero</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in _filterBook)
+                        {
+                            <tr class="align-middle">
+                                <td>@book.Title</td>
+                                <td>@book.Author</td>
+                                <td>@book.Subject</td>
+                                <td>@book.Language</td>
+                                <td>@book.Gender</td>
+                                <td>
+                                    <a href="/editar/@book.Id" class="btn btn-info btn-sm me-2">
+                                        Editar
+                                    </a>
+
+                                    <button class="btn btn-danger btn-sm" @onclick="() => RemoveBook(book.Id)">
+                                        Remover
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div class="card-footer">
+            <small class="text-muted">@_filterBook.Count de @_book.Count livro(s) registado(s).</small>
+        </div>
+    </div>
+</div>
+
+<InfoModal Message="@_message" Success="@_success"/>
+
+@code {
+    private List<Book> _book = [];
+    private List<Book> _filterBook = [];
+    private string? _message;
+    private string ? _searchTerm;
+    private bool _success;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _filterBook = _book = await Operation.ListBookAsync();
+        }
+        catch (Exception error)
+        {
+            _message = $"Erro ao carregar a lista do(s) livro(s). Erro: {error.Message}";
+        }
+    }
+
+    private async Task RemoveBook(int id)
+    {
+        try
+        {
+            Book? bookToRemove = _book.FirstOrDefault(l => l.Id == id);
+            string? titleBook = bookToRemove?.Title;
+            
+            bool confirmRemove = await JSRuntime.InvokeAsync<bool>("confirm", $"Deseja remover o livro {titleBook}?");
+
+            if (!confirmRemove)
+                return; 
+            
+            await Operation.RemoveBookAsync(id);
+            
+            _message = "Livro removido com sucesso.";
+            _success = true;
+            _book = _book.Where(l => l.Id != id).ToList();
+            
+            FilterBook();
+        }
+        catch (Exception error)
+        {
+            _message = $"Erro ao remover o livro. Erro: {error.Message}";
+            _success = false;
+        }
+        finally
+        {
+            await Task.Delay(3000);
+            _message = string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    private void FilterBook()
+    {
+        if (string.IsNullOrWhiteSpace(_searchTerm))
+        {
+            _filterBook = _book;
+        }
+        else
+        {
+            string term = _searchTerm.ToLower();
+
+            _filterBook = _book.Where(
+                book => book.Title?.ToLower().Contains(term) == true ||
+                book.Author?.ToLower().Contains(term) == true ||
+                book.Subject?.ToLower().Contains(term) == true ||
+                book.Language?.ToLower().Contains(term) == true ||
+                book.Gender?.ToLower().Contains(term) == true
+            ).ToList();
+        }
+    }
+}

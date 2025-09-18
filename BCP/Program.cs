@@ -1,6 +1,6 @@
-using BibliotecaCarvalhoPereira.Components;
-using BibliotecaCarvalhoPereira.Data;
-using BibliotecaCarvalhoPereira.Services;
+using BCP.Components;
+using BCP.Data;
+using BCP.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,14 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<BookContext>(options => 
-options.UseMySql(
-    builder.Configuration.GetConnectionString("ConexaoBD") ?? 
+builder.Services.AddDbContext<BookContext>(option =>
+option.UseMySql(builder.Configuration.GetConnectionString("ConexaoBD") ??
         throw new InvalidOperationException("A string de conexão não foi configurada corretamente."),
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ConexaoBD"))
-    ));
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ConexaoBD"))));
 
-// Configura o serviço de injeção de dependência para LivroRepository.
+// Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
 
 var app = builder.Build();
