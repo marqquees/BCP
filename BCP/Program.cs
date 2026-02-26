@@ -10,9 +10,8 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<BookContext>(option =>
-option.UseMySql(builder.Configuration.GetConnectionString("ConexaoBD") ??
-        throw new InvalidOperationException("A string de conexão não foi configurada corretamente."),
-    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ConexaoBD"))));
+option.UseNpgsql(builder.Configuration.GetConnectionString("ConexaoBD") ??
+        throw new InvalidOperationException("A string de conexão não foi configurada corretamente.")));
 
 // Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
@@ -21,10 +20,7 @@ var app = builder.Build();
 
 // Configura o pipeline de solicitações HTTP.
 if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Erro", createScopeForErrors: true);
     app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 app.MapControllers();

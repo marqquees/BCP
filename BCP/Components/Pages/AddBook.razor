@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/novo-livro"
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -15,30 +15,11 @@
             <EditForm Model="_book" OnValidSubmit="SubmitAddBook" FormName="addBookForm" class="needs-validation">
                 <DataAnnotationsValidator />
 
-                <Form Book="_book" />
-
-                <!-- Botões de Ação -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex gap-2 justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary" @onclick="ClearForm">
-                                <i class="bi bi-x-circle"></i> Limpar
-                            </button>
-
-                            <button type="submit" class="btn btn-primary" disabled="@_save">
-                                @if (_save)
-                                {
-                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                                    <span>Salvando...</span>
-                                }
-                                else
-                                {
-                                    <i class="bi bi-check-circle"></i><span>Salvar</span>
-                                }
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <Form @ref="_form" 
+                    Book="_book" 
+                    Save="_save" 
+                    PrimaryButtonText="Salvando" 
+                    SecondaryButtonText="Salvar"/>
             </EditForm>
         </div>
     </div>
@@ -51,6 +32,7 @@
     private string? _message;
     private bool _save;
     private bool _success;
+    private Form? _form;
 
     private async Task SubmitAddBook()
     {
@@ -63,7 +45,7 @@
             _message = $"Livro {_book.Title} adicionado com sucesso!";
             _success = true;
             
-            ClearForm();
+            _form?.ClearForm();
         }
         catch (Exception erro)
         {
@@ -77,12 +59,6 @@
             await Task.Delay(3000);
             _message = string.Empty;
         }    
-    }
-
-    private void ClearForm()
-    {
-        _book = new Book();
-        StateHasChanged();
     }
 }
 

@@ -1,4 +1,4 @@
-﻿@page "/lista-de-livros"
+﻿@page "/"
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -81,7 +81,7 @@
     private List<Book> _book = [];
     private List<Book> _filterBook = [];
     private string? _message;
-    private string ? _searchTerm;
+    private string? _searchTerm;
     private bool _success;
 
     protected override async Task OnInitializedAsync()

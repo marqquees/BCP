@@ -27,7 +27,10 @@ else
                 <EditForm Model="_book" OnValidSubmit="UpdateBook" FormName="editBookForm" class="needs-validation">
                     <DataAnnotationsValidator />
 
-                    <Form Book="_book" />
+                    <Form Book="_book" 
+                        Save="_save" 
+                        PrimaryButtonText="" 
+                        SecondaryButtonText="" />
 
                     <!-- Botões de Ação -->
                     <div class="card">

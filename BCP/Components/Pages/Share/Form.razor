@@ -131,12 +131,46 @@
     </div>
 </div>
 
+<!-- Seção: Botões de Ação -->
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex gap-2 justify-content-end">
+            <button type="button" class="btn btn-outline-secondary" @onclick="ClearForm">
+                <i class="bi bi-x-circle"></i> Limpar
+            </button>
+
+            <button type="submit" class="btn btn-primary" disabled="@Save">
+                @if (Save)
+                {
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    <span>@PrimaryButtonText...</span>
+                }
+                else
+                {
+                    <i class="bi bi-check-circle"></i>
+                    <span>@SecondaryButtonText</span>
+                }
+            </button>
+        </div>
+    </div>
+</div>
+
 @code {
     [Parameter] public Book Book { get; set; } = new();
+    [Parameter] public bool Save { get; set; }
+    [Parameter] public string? PrimaryButtonText { get; set; }
+    [Parameter] public string? SecondaryButtonText { get; set; }
+    [Parameter] public bool ShowCancelButton { get; set; }
 
     protected override void OnInitialized()
     {
         if (Book.PublicationDate == default(DateOnly)) 
             Book.PublicationDate = DateOnly.FromDateTime(DateTime.Today);
+    }
+
+    public void ClearForm()
+    {
+        Book = new Book();
+        OnInitialized();
     }
 }
