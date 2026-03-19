@@ -10,19 +10,12 @@ builder.Services.AddRazorComponents().
     AddInteractiveServerComponents();
 
 builder.Services.AddDbContext<BookContext>(option =>
-option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+option.UseSqlite("Data Source=./bcp.db"));
 
 // Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
 
 var app = builder.Build();
-
-// Verifica se o diretório para a base de dados existe, caso contrário, cria-o.
-var dbPath = "/home/data";
-if (!Directory.Exists(dbPath))
-{
-    Directory.CreateDirectory(dbPath);
-}
 
 // Aplica as migrações pendentes a base de dados.
 using (var scope = app.Services.CreateScope())
