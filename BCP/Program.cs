@@ -10,13 +10,19 @@ builder.Services.AddRazorComponents().
     AddInteractiveServerComponents();
 
 builder.Services.AddDbContext<BookContext>(option =>
-option.UseNpgsql(builder.Configuration.GetConnectionString("ConexaoBD") ??
-        throw new InvalidOperationException("A string de conexão não foi configurada corretamente.")));
+option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
 
 var app = builder.Build();
+
+// Aplica as migrações pendentes a base de dados.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BookContext>();
+    db.Database.Migrate();
+}
 
 // Configura o pipeline de solicitações HTTP.
 if (!app.Environment.IsDevelopment())

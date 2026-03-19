@@ -10,7 +10,6 @@ O sistema foca em oferecer uma interface simples e intuitiva com funcionalidades
 ## 🚀 Funcionalidades Principais
 
 * **Gestão de Cadastros (CRUD):** Criação, leitura, atualização e exclusão de registos.
-* **Dashboard:** Visualização e mapeamento dos livros.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -21,7 +20,7 @@ O projeto está a ser desenvolvido utilizando as seguintes tecnologias:
 * **.NET 8**
 * **Entity Framework**
 * **HTML5 & CSS3**
-* **PostgreSQL**
+* **SQLite**
 
 ## 📝 Licença
 
