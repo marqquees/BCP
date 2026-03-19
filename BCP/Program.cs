@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona serviços ao container.
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
-builder.Services.AddControllers();
+builder.Services.AddRazorComponents().
+    AddInteractiveServerComponents();
 
 builder.Services.AddDbContext<BookContext>(option =>
 option.UseNpgsql(builder.Configuration.GetConnectionString("ConexaoBD") ??
@@ -23,8 +23,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 
 app.UseHttpsRedirection();
-app.MapControllers();
+
 app.UseStaticFiles();
 app.UseAntiforgery();
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+
+app.MapRazorComponents<App>().
+    AddInteractiveServerRenderMode();
 app.Run();

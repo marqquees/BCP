@@ -11,22 +11,51 @@ namespace BCP.Services
         private readonly BookContext _context = context;
         private readonly ILogger<BookOperation> _logger = logger;
 
+        /// <summary>
+        /// Adiciona um novo livro ao catálogo.
+        /// Se o livro já tiver um ISBN definido,
+        /// verifica se já existe um livro com o mesmo ISBN na base de dados.
+        /// Se existir, lança uma exceção informando que o livro já existe e não o adiciona.
+        /// </summary>
+        /// <param name="book">
+        /// O livro a ser adicionado ao catálogo.
+        /// </param>
+        /// <returns>
+        /// O livro adicionado ao catálogo ou o livro original se ocorrer um erro durante a adição.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Lançada quando um livro com o mesmo ISBN já existe no catálogo.
+        /// </exception>
         public async Task<Book> AddBookAsync(Book book)
         {
             try
             {
                 EntityEntry<Book> b = await _context.Books.AddAsync(book);
+                
+                if (book.ISBN is not null)
+                {
+                    bool existsIsbn = await _context.Books.AnyAsync(l => l.ISBN == book.ISBN);
+                    if (existsIsbn) 
+                        throw new InvalidOperationException($"O livro com ISBN {book.ISBN} já existe no catálogo.");
+                }
+                
                 await _context.SaveChangesAsync();
 
                 return b.Entity;
             }
             catch (DbException error)
             {
-                _logger.LogError(error, "Erro ao adicionar o book {TitleBook}.", book.Title);
+                _logger.LogError(error, "Erro ao adicionar o livro {TitleBook}.", book.Title);
                 return book;
             }
         }
 
+        /// <summary>
+        /// Recupera uma lista de todos os livros disponíveis no catálogo.
+        /// </summary>
+        /// <returns>
+        /// Uma lista de livros disponíveis no catálogo ou uma lista vazia se ocorrer um erro durante a recuperação dos dados.
+        /// </returns>
         public async Task<List<Book>> ListBookAsync()
         {
             try
@@ -35,12 +64,22 @@ namespace BCP.Services
             }
             catch (DbException error)
             {
-                _logger.LogError(error, "Erro ao carregar a lista dos livros.");
+                _logger.LogError(error, "Erro ao carregar a lista do catálogo dos livros.");
                 return [];
             }
         }
 
-        public async Task<Book> UpdateBookAsync(Book book)
+        /// <summary>
+        /// Atualiza as informações de um livro existente no catálogo.
+        /// </summary>
+        /// <param name="book">
+        /// O livro com as informações atualizadas.
+        /// O livro deve conter um ID válido para que a atualização seja realizada corretamente.
+        /// </param>
+        /// <returns>
+        /// O livro atualizado no catálogo ou o livro original se ocorrer um erro durante a atualização dos dados.
+        /// </returns>
+        public async Task<Book> UpdateDataBookAsync(Book book)
         {
             try
             {
@@ -59,44 +98,88 @@ namespace BCP.Services
             }
             catch (DbException error)
             {
-                _logger.LogError(error, "Erro ao atualizar o book {TitleBook}.", book.Title);
+                _logger.LogError(error, "Erro ao atualizar o livro {TitleBook}.", book.Title);
                 return book;
             }
         }
 
-        public async Task<Book?> FindBookByIdAsync(int id)
+        /// <summary>
+        /// Busca um livro no catálogo pelo seu ID.
+        /// </summary>
+        /// <param name="idBook">
+        /// O ID do livro a ser buscado no catálogo.
+        /// </param>
+        /// <returns>
+        /// O livro encontrado no catálogo ou nulo (null) se o livro não for encontrado ou ocorrer um erro durante a busca.
+        /// </returns>
+        public async Task<Book?> FindBookByIdAsync(int idBook)
         {
             try
             {
-                return await _context.Books.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
+                return await _context.Books.AsNoTracking().FirstOrDefaultAsync(l => l.Id == idBook);
             }
             catch (DbException error)
             {
-                _logger.LogError(error, "Erro ao buscar o book com ID {IdBook}.", id);
+                _logger.LogError(error, "Erro ao buscar o livro com ID: {IdBook}.", idBook);
                 return null;
             }
         }
 
-        public async Task<bool> RemoveBookAsync(int id)
+        /// <summary>
+        /// Remove um livro do catálogo pelo seu ID.
+        /// </summary>
+        /// <param name="idBook">
+        /// O ID do livro a ser removido do catálogo.
+        /// </param>
+        /// <returns>
+        /// true se o livro foi removido com sucesso do catálogo e false se o livro não for encontrado ou ocorrer um erro durante a remoção dos dados.
+        /// </returns>
+        public async Task<bool> RemoveBookAsync(int idBook)
         {
             try
             {
-                // Verifica se o book existe antes de tentar removê-lo.
-                Book? book = await _context.Books.FindAsync(id);
+                // Verifica se o livro existe antes de tentar removê-lo.
+                Book? book = await _context.Books.FindAsync(idBook);
 
-                if (book == null)
-                    return false;
-
+                if (book is null) return false;
+                
                 _context.Books.Remove(book);
                 await _context.SaveChangesAsync();
-
                 return true;
             }
             catch (DbException error)
             {
-                _logger.LogError(error, "Erro ao remover o livro com o ID {IdBook}.", id);
+                _logger.LogError(error, "Erro ao remover o livro com o ID: {IdBook}.", idBook);
                 return false;
             }
+        }
+        
+        /// <summary>
+        /// Filtra a lista de livros com base em um termo de pesquisa.
+        /// </summary>
+        /// <param name="books">
+        /// A coleção de livros a ser filtrada.
+        /// </param>
+        /// <param name="searchTerm">
+        /// O termo de pesquisa usado para filtrar os livros.
+        /// </param>
+        /// <returns>
+        /// Uma lista de livros que correspondem ao termo de pesquisa ou
+        /// a lista original de livros se o termo de pesquisa for nulo, vazio ou contiver apenas espaços em branco.
+        /// </returns>
+        public static List<Book> FilterBook(IEnumerable<Book> books, string? searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return books.ToList();
+
+            return books
+                .Where(book =>
+                    book.Title?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
+                    book.Author?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
+                    book.Subject?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
+                    book.Gender?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true
+                )
+                .ToList();
         }
     }
 }

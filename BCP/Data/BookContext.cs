@@ -7,6 +7,13 @@ namespace BCP.Data
     {
         public DbSet<Book> Books { get; set; }
 
+        /// <summary>
+        /// Configura o modelo de dados para a entidade "Book" usando o Fluent API do Entity Framework Core.
+        /// </summary>
+        /// <param name="modelBuilder">
+        /// O objeto ModelBuilder usado para configurar o modelo de dados.
+        /// Ele permite definir as propriedades, chaves primárias, restrições e outras configurações para a entidade "Book".
+        /// </param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -17,50 +24,49 @@ namespace BCP.Data
                 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
-
+                
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(150);
+                
                 entity.Property(e => e.ISBN)
                     .HasMaxLength(13);
 
-                entity.Property(e => e.EAN)
-                    .HasMaxLength(13);
-
-                entity.Property(e => e.Title)
+                entity.Property(e => e.Format)
                     .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Subject)
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Subtitle)
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Edition)
-                    .HasMaxLength(50);
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Author)
                     .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Gender)
                     .HasMaxLength(100);
-
+                
+                entity.Property(e => e.Subject)
+                    .HasMaxLength(100);
+                
+                entity.Property(e => e.Gender)
+                    .IsRequired()
+                    .HasMaxLength(40);
+                
                 entity.Property(e => e.Publisher)
-                    .HasMaxLength(255);
+                    .IsRequired()
+                    .HasMaxLength(100);
+                
+                entity.Property(e => e.Edition)
+                    .HasMaxLength(4);
 
-                entity.Property(e => e.PublicationDate)
-                    .HasColumnType("date");
-
-                entity.Property(e => e.Language)
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Format)
-                    .HasMaxLength(50);
+                entity.Property(e => e.PublicationYear)
+                    .IsRequired()
+                    .HasMaxLength(4);
 
                 entity.Property(e => e.Description)
-                    .HasColumnType("text");
+                    .HasMaxLength(500);
 
                 entity.Property(e => e.Note)
-                    .HasColumnType("text");
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Owner)
+                    .IsRequired()
+                    .HasMaxLength(40);
             });
         }
     }

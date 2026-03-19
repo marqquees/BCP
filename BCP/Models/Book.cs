@@ -2,27 +2,53 @@
 
 namespace BCP.Models
 {
+    /// <summary>
+    /// Modelo de dados para representar um livro, contendo informações como
+    /// ISBN, título, autor, editora, ano de publicação, entre outros.
+    /// </summary>
     public class Book
     {
         [Key]
         public int Id { get; set; }
-        public string? ISBN { get; set; }
-        public string? EAN { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório.")]
+        [MaxLength(150, ErrorMessage = "O título deve conter no máximo 150 caracteres.")]
         public string? Title { get; set; }
-        public string? Subject { get; set; }
-        public string? Subtitle { get; set; }
-        public string? Edition { get; set; }
+
+        [StringLength(13, ErrorMessage = "O ISBN deve conter 13 caracteres.")]
+        public string? ISBN { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório.")]
-        public string? Author { get; set; }
-        public string? Gender { get; set; }
-        public string? Publisher { get; set; }
-        public DateOnly PublicationDate { get; set; }
-        public string? Language { get; set; }
         public string? Format { get; set; }
+
+        [Required(ErrorMessage = "Este campo é obrigatório.")]
+        [MaxLength(100, ErrorMessage = "O autor deve conter no máximo 100 caracteres.")]
+        public string? Author { get; set; }
+
+        [MaxLength(100, ErrorMessage = "O assunto deve conter no máximo 100 caracteres.")]
+        public string? Subject { get; set; }
+
+        [Required(ErrorMessage = "Este campo é obrigatório.")]
+        public string? Gender { get; set; }
+
+        [Required(ErrorMessage = "Este campo é obrigatório.")]
+        [MaxLength(100, ErrorMessage = "A editora deve conter no máximo 100 caracteres.")]
+        public string? Publisher { get; set; }
+
+        [Range(1, 9999, ErrorMessage = "A edição deve ser um número entre 1 e 9999.")]
+        public int? Edition { get; set; }
+
+        [Required(ErrorMessage = "Este campo é obrigatório.")]
+        [StringLength(4, ErrorMessage = "O ano de publicação deve conter 4 caracteres.")]
+        public string? PublicationYear { get; set; }
+
+        [MaxLength(500, ErrorMessage = "A descrição deve conter no máximo 500 caracteres.")]
         public string? Description { get; set; }
+
+        [MaxLength(200, ErrorMessage = "A nota deve conter no máximo 200 caracteres.")]
         public string? Note { get; set; }
+
+        [Required(ErrorMessage = "Este campo é obrigatório.")]
+        public string? Owner { get; set; }
     }
 }

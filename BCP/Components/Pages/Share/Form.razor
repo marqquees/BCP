@@ -1,176 +1,150 @@
 ﻿@using BCP.Models
 
-<!-- Seção: Informações Básicas -->
+<!-- Secção: Informações Básicas -->
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0">Informações Básicas</h5>
     </div>
     <div class="card-body">
         <div class="row g-4">
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Título</label>
-                <InputText @bind-Value="Book.Title" class="form-control" placeholder="Digite o título do livro." />
-                <ValidationMessage For="@(() => Book.Title)" class="text-danger small" />
+            
+            <!-- Título -->
+            <div class="col-12 col-md-8">
+                <label class="form-label fw-bolder">Título</label>
+                <InputText @bind-Value="Book.Title" class="form-control"/>
+                <ValidationMessage For="@(() => Book.Title)" class="text-danger small"/>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Subtítulo</label>
-                <InputText @bind-Value="Book.Subtitle" class="form-control" placeholder="Subtítulo (opcional)." />
+            <!-- ISBN -->
+            <div class="col-12 col-md-2">
+                <label class="form-label fw-bolder">ISBN</label>
+                <InputText @bind-Value="Book.ISBN" class="form-control" placeholder="9780000000000"/>
+                <ValidationMessage For="() => Book.ISBN" class="text-danger small"/>
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label fw-semibold">ISBN</label>
-                <InputText @bind-Value="Book.ISBN" class="form-control" placeholder="978-0000000000" />
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label fw-semibold">EAN</label>
-                <InputText @bind-Value="Book.EAN" class="form-control" placeholder="Código EAN" />
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label fw-semibold">Formato</label>
+            <!-- Formato -->
+            <div class="col-12 col-md-2">
+                <label class="form-label fw-bolder">Formato</label>
                 <InputSelect @bind-Value="Book.Format" class="form-select">
                     @foreach (var format in OptionForm.Format)
                     {
-                        <option>@format</option>
+                        <option value="@format">@format</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="() => Book.Format" class="text-danger small"/>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Seção: Autoria e Classificação -->
+<!-- Secção: Autoria e Classificação -->
 <div class="card mb-4">
     <div class="card-header bg-success text-white">
         <h5 class="mb-0">Autoria e Classificação</h5>
     </div>
     <div class="card-body">
         <div class="row g-4">
-            <div class="col-md-8">
-                <label class="form-label fw-semibold">Autor(es)</label>
-                <InputText @bind-Value="Book.Author" class="form-control" placeholder="Nome do autor(es)." />
-                <ValidationMessage For="@(() => Book.Author)" class="text-danger small" />
+            
+            <!-- Autor -->
+            <div class="col-12 col-md-5">
+                <label class="form-label fw-bolder">Autor</label>
+                <InputText @bind-Value="Book.Author" class="form-control"/>
+                <ValidationMessage For="@(() => Book.Author)" class="text-danger small"/>
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label fw-semibold">Idioma</label>
-                <InputSelect @bind-Value="Book.Language" class="form-select">
-                    @foreach (var language in OptionForm.Language)
-                    {
-                        <option>@language</option>
-                    }
-                </InputSelect>
+            <!-- Assunto -->
+            <div class="col-12 col-md-5">
+                <label class="form-label fw-bolder">Assunto</label>
+                <InputText @bind-Value="Book.Subject" class="form-control"/>
+                <ValidationMessage For="() => Book.Subject" class="text-danger small"/>
             </div>
 
-            <div class="col-md-8">
-                <label class="form-label fw-semibold">Assunto</label>
-                <InputText @bind-Value="Book.Subject" class="form-control" placeholder="Assunto." />
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label fw-semibold">Género</label>
+            <!-- Género -->
+            <div class="col-12 col-md-2">
+                <label class="form-label fw-bolder">Género</label>
                 <InputSelect @bind-Value="Book.Gender" class="form-select">
                     @foreach (var gender in OptionForm.Gender)
                     {
-                        <option>@gender</option>
+                        <option value="@gender">@gender</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="() => Book.Gender" class="text-danger small"/>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Seção: Publicação -->
+<!-- Secção: Dados de Publicação -->
 <div class="card mb-4">
     <div class="card-header bg-info text-white">
         <h5 class="mb-0">Dados de Publicação</h5>
     </div>
     <div class="card-body">
         <div class="row g-4">
-            <div class="col-md-7">
-                <label class="form-label fw-semibold">Editora</label>
-                <InputText @bind-Value="Book.Publisher" class="form-control" placeholder="Nome da editora." />
+            
+            <!-- Editora -->
+            <div class="col-12 col-md-8">
+                <label class="form-label fw-bolder">Editora</label>
+                <InputText @bind-Value="Book.Publisher" class="form-control"/>
+                <ValidationMessage For="() => Book.Publisher" class="text-danger small"/>
             </div>
-
-            <div class="col-md-2">
-                <label class="form-label fw-semibold">Edição</label>
-                <InputText @bind-Value="Book.Edition" class="form-control" placeholder="1ª" />
+            
+            <!-- Edição -->
+            <div class="col-6 col-md-2">
+                <label class="form-label fw-bolder">Edição</label>
+                <InputNumber @bind-Value="Book.Edition" class="form-control" min="1"/>
+                <ValidationMessage For="() => Book.Edition" class="text-danger small"/>
             </div>
-
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Data de Publicação</label>
-                <InputDate @bind-Value="Book.PublicationDate" class="form-control" />
+            
+            <!-- Ano de Publicação -->
+            <div class="col-6 col-md-2">
+                <label class="form-label fw-bolder">Ano de Publicação</label>
+                <InputText @bind-Value="Book.PublicationYear" class="form-control"/>
+                <ValidationMessage For="() => Book.PublicationYear" class="text-danger small"/>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Seção: Descrição -->
+<!-- Secção: Descrição, Observação e Proprietário -->
 <div class="card mb-4">
     <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0">Descrição e Observações</h5>
+        <h5 class="mb-0">Descrição e Observação</h5>
     </div>
     <div class="card-body">
         <div class="row g-4">
+            
+            <!-- Descrição -->
             <div class="col-12">
-                <label class="form-label fw-semibold">Descrição</label>
-                <InputTextArea class="form-control" rows="4" 
-                                @bind-Value="Book.Description"
-                                placeholder="Sinopse ou descrição do conteúdo do livro..." />
+                <label class="form-label fw-bolder">Descrição</label>
+                <InputTextArea @bind-Value="Book.Description" class="form-control" rows="5" 
+                               placeholder="Descrição do conteúdo do livro..."/>
+                <ValidationMessage For="() => Book.Description" class="text-danger small"/>
             </div>
 
+            <!-- Observação -->
             <div class="col-12">
-                <label class="form-label fw-semibold">Observações</label>
-                <InputTextArea class="form-control" rows="3" 
-                                @bind-Value="Book.Note"
-                                placeholder="Observações adicionais, estado do livro, entre outras..." />
+                <label class="form-label fw-bolder">Observação</label>
+                <InputTextArea @bind-Value="Book.Note" class="form-control" rows="3"
+                               placeholder="Observação adicional, estado do livro, entre outros..."/>
+                <ValidationMessage For="() => Book.Note" class="text-danger small"/>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Seção: Botões de Ação -->
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex gap-2 justify-content-end">
-            <button type="button" class="btn btn-outline-secondary" @onclick="ClearForm">
-                <i class="bi bi-x-circle"></i> Limpar
-            </button>
-
-            <button type="submit" class="btn btn-primary" disabled="@Save">
-                @if (Save)
-                {
-                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                    <span>@PrimaryButtonText...</span>
-                }
-                else
-                {
-                    <i class="bi bi-check-circle"></i>
-                    <span>@SecondaryButtonText</span>
-                }
-            </button>
+            <!-- Proprietário -->
+            <div class="col-2 col-md-2">
+                <label class="form-label fw-bolder">Proprietário</label>
+                <InputSelect @bind-Value="Book.Owner" class="form-select">
+                    @foreach(var owner in OptionForm.Owner)
+                    {
+                        <option value="@owner">@owner</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="() => Book.Owner" class="text-danger small"/>
+            </div>
         </div>
     </div>
 </div>
 
 @code {
     [Parameter] public Book Book { get; set; } = new();
-    [Parameter] public bool Save { get; set; }
-    [Parameter] public string? PrimaryButtonText { get; set; }
-    [Parameter] public string? SecondaryButtonText { get; set; }
-    [Parameter] public bool ShowCancelButton { get; set; }
-
-    protected override void OnInitialized()
-    {
-        if (Book.PublicationDate == default(DateOnly)) 
-            Book.PublicationDate = DateOnly.FromDateTime(DateTime.Today);
-    }
-
-    public void ClearForm()
-    {
-        Book = new Book();
-        OnInitialized();
-    }
 }

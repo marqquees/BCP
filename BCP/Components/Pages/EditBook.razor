@@ -1,4 +1,4 @@
-@page "/editar/{id:int}"
+@page "/editar-livro/{id:int}"
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -10,9 +10,13 @@
 
 <PageTitle>Editar Livro</PageTitle>
 
-@if (_book == null)
+@if (_book is null)
 {
-    <p><em>Carregando...</em></p>
+    <div class="d-flex justify-content-center p-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div>
 }
 else
 {
@@ -20,40 +24,27 @@ else
         <div class="row justify-content-center">
             <div class="col-lg-11 col-xl-12">
                 <div class="mb-4">
-                    <h1 class="h3 mb-2">Editar Livro</h1>
-                    <p class="text-muted">Atualize as informações do livro <strong>@_book.Title</strong></p>
+                    <h1 class="h3 mb-2">Edite os dados do Livro</h1>
+                    @*<p class="text-muted">Atualize as informações do livro <strong>@_book.Title</strong></p>*@
                 </div>
 
-                <EditForm Model="_book" OnValidSubmit="UpdateBook" FormName="editBookForm" class="needs-validation">
-                    <DataAnnotationsValidator />
+                <EditForm Model="_book" OnValidSubmit="UpdateDataBook" FormName="editBookForm" class="needs-validation">
+                    <DataAnnotationsValidator/>
 
-                    <Form Book="_book" 
-                        Save="_save" 
-                        PrimaryButtonText="" 
-                        SecondaryButtonText="" />
+                    <Form Book="_book"></Form>
 
                     <!-- Botões de Ação -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex gap-2 justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary" @onclick="CancelEdit">
-                                    <i class="bi bi-arrow-left"></i> Cancelar
-                                </button>
+                    <div class="d-flex flex-wrap gap-2 justify-content-end">
 
-                                <button type="submit" class="btn btn-success" disabled="@_save">
-                                    @if (_save)
-                                    {
-                                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                                        <span>Atualizando...</span>
-                                    }
-                                    else
-                                    {
-                                        <i class="bi bi-check-circle"></i>
-                                        <span>Atualizar</span>
-                                    }
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Cancelar -->
+                        <button type="button" class="btn btn-outline-secondary" @onclick="CancelEdit">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </button>
+
+                        <!-- Atualizar -->
+                        <button type="submit" class="btn btn-success">
+                            Atualizar
+                        </button>
                     </div>
                 </EditForm>
             </div>
@@ -61,16 +52,18 @@ else
     </div>
 }
 
-<InfoModal Message="@_message" Success="@_success" />
+<InfoModal Message="@_message" Success="@_success"/>
 
 @code {
     [Parameter] public int Id { get; set; }
     
     private Book? _book;
     private string? _message;
-    private bool _save;
     private bool _success;
 
+    /// <summary>
+    /// Carrega os dados do livro para edição com base no ID fornecido na URL.
+    /// </summary>
     protected override async Task OnInitializedAsync()
     {
         try
@@ -79,45 +72,47 @@ else
         }
         catch (Exception error)
         {
-            _message = $"Erro ao carregar o livro {_book?.Title}. Erro: {error.Message}";
+            _message = $"Erro ao carregar os dados do livro {_book?.Title}. " +
+                       $"\n Erro: {error.Message}";
             _success = false;
         }
     }
 
-    private async Task UpdateBook()
+    /// <summary>
+    /// Atualiza os dados do livro na base de dados e exibe uma mensagem de sucesso ou erro.
+    /// </summary>
+    private async Task UpdateDataBook()
     {
-        if (_book == null) 
-            return;
+        if (_book is null) return;
 
         try
         {
-            _save = true;
-            
-            await Operation.UpdateBookAsync(_book);
+            await Operation.UpdateDataBookAsync(_book);
 
-            _message = $"Livro {_book.Title} atualizado com sucesso!";
+            _message = "Atualizado!";
             _success = true;
             
-            // Redirecionar após 2 segundos.
             await Task.Delay(2000);
-            Navigation.NavigateTo("/lista-de-livros");
+            Navigation.NavigateTo("/");
         }
         catch (Exception error)
         {
-            _message = $"Erro ao atualizar o livro {_book.Title}. Erro: {error.Message}";
+            _message = $"Erro ao atualizar o livro {_book.Title}." +
+                       $"\nErro: {error.Message}";
             _success = false;
         }
         finally
         {
-            _save = false;
-            StateHasChanged();
-            await Task.Delay(5000);
             _message = string.Empty;
+            StateHasChanged();
         }    
     }
 
+    /// <summary>
+    /// Navega de volta para a página inicial sem salvar as alterações feitas no livro.
+    /// </summary>
     private void CancelEdit()
     {
-        Navigation.NavigateTo("/lista-de-livros");
+        Navigation.NavigateTo("/");
     }
 }

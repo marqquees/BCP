@@ -83,10 +83,10 @@
     }
 
     .nav-scrollable {
-        /* Never collapse the sidebar for wide screens */
+        /* Nunca minimize a barra lateral em ecrãs largos */
         display: block;
 
-        /* Allow sidebar to scroll for tall menus */
+        /* Permitir que a barra lateral se desloque para menus altos */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }

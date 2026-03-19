@@ -1,0 +1,235 @@
+@page "/detalhes/{id:int}"
+@rendermode InteractiveServer
+
+@using BCP.Components.Pages.Share
+@using BCP.Models
+@using BCP.Services
+
+@inject BookOperation Operation
+@inject NavigationManager Navigation
+
+<PageTitle>Detalhes do Livro</PageTitle>
+
+<div class="container-fluid py-4">
+    @if (!string.IsNullOrWhiteSpace(_message) && !_success)
+    {
+        <div class="alert alert-danger">@_message</div>
+    }
+    else if (_book is null)
+    {
+        <div class="alert alert-warning">Livro não encontrado.</div>
+    }
+    else
+    {
+        <!-- Secção: Informações Básicas -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Informações Básicas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    
+                    <!-- Título -->
+                    <div class="col-12 col-md-8">
+                        <label class="form-label fw-bolder">Título</label>
+                        <p class="form-control-plaintext">@(_book?.Title ?? NoneAbove) </p>
+                    </div>
+
+                    <!-- ISBN -->
+                    <div class="col-12 col-md-2">
+                        <label class="form-label fw-bolder">ISBN</label>
+                        <p class="form-control-plaintext">@(_book?.ISBN ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Formato -->
+                    <div class="col-12 col-md-2">
+                        <label class="form-label fw-bolder">Formato</label>
+                        <p class="form-control-plaintext">@(_book?.Format ?? NoneAbove)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secção: Autoria e Classificação -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Autoria e Classificação</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    
+                    <!-- Autor -->
+                    <div class="col-12 col-md-4">
+                        <label class="form-label fw-bolder">Autor</label>
+                        <p class="form-control-plaintext">@(_book?.Author ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Género -->
+                    <div class="col-12 col-md-4">
+                        <label class="form-label fw-bolder">Género</label>
+                        <p class="form-control-plaintext">@(_book?.Gender ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Assunto -->
+                    <div class="col-12 col-md-4">
+                        <label class="form-label fw-bolder">Assunto</label>
+                        <p class="form-control-plaintext">@(_book?.Subject ?? NoneAbove)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secção: Dados de Publicação -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Dados de Publicação</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    
+                    <!-- Editora -->
+                    <div class="col-12 col-md-7">
+                        <label class="form-label fw-bolder">Editora</label>
+                        <p class="form-control-plaintext">@(_book?.Publisher ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Edição -->
+                    <div class="col-6 col-md-2">
+                        <label class="form-label fw-bolder">Edição</label>
+                        <p class="form-control-plaintext">@(_book?.Edition.ToString() ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Ano de Publicação -->
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-bolder">Ano de Publicação</label>
+                        <p class="form-control-plaintext">@(_book?.PublicationYear ?? NoneAbove)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secção: Descrição, Observação e Proprietário -->
+        <div class="card mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Descrição e Observação</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    
+                    <!-- Descrição -->
+                    <div class="col-12">
+                        <label class="form-label fw-bolder">Descrição</label>
+                        <p class="form-control-plaintext">@(_book?.Description ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Observação -->
+                    <div class="col-12">
+                        <label class="form-label fw-bolder">Observação</label>
+                        <p class="form-control-plaintext">@(_book?.Note ?? NoneAbove)</p>
+                    </div>
+
+                    <!-- Proprietário -->
+                    <div class="col-12 col-md-2">
+                        <label class="form-label fw-bolder">Proprietário</label>
+                        <p class="form-control-plaintext">@(_book?.Owner ?? NoneAbove)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botões de Ação -->
+        <div class="d-flex flex-wrap gap-2 justify-content-end">
+            
+            <!-- Editar -->
+            <button type="button" class="btn btn-primary" @onclick="EditBook">
+                Editar
+            </button>
+            
+            <!-- Remover -->
+            <button type="button" class="btn btn-danger" @onclick="() => _showRemoveConfirmation = true">
+                <i class="bi bi-pencil"></i>Remover
+            </button>
+        </div>
+    }
+</div>
+
+@if (_showRemoveConfirmation)
+{
+    <RemoveConfirmationModal
+        RemoveBook="@(() => RemoveBook(Id))"
+        Cancel="@(() => _showRemoveConfirmation = false)" />
+}
+
+<InfoModal Message="@_message" Success="@_success"/>
+
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private const string NoneAbove = "N/A";
+    
+    private Book? _book;
+    private string? _message;
+    private bool _success;
+    private bool _showRemoveConfirmation;
+
+    /// <summary>
+    /// Carrega os detalhes do livro com base no ID fornecido.
+    /// Se ocorrer um erro durante a carga, exibe uma mensagem de erro.
+    /// </summary>
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _book = await Operation.FindBookByIdAsync(Id);
+            _success = true;
+        }
+        catch (Exception error)
+        {
+            _message = $"Erro ao carregar os dados do livro {_book?.Title}. " +
+                       $"Erro: {error.Message}";
+            _success = false;
+        }
+    }
+    
+    /// <summary>
+    /// Navega para a página de edição do livro, passando o ID do livro como parâmetro.
+    /// </summary>
+    private void EditBook()
+    {
+        Navigation.NavigateTo($"/editar-livro/{Id}");
+    }
+    
+    /// <summary>
+    /// Remove o livro com base no ID fornecido.
+    /// Se a remoção for bem-sucedida, exibe uma mensagem de sucesso e redireciona para a página inicial após um breve atraso.
+    /// Se ocorrer um erro durante a remoção, exibe uma mensagem de erro.
+    /// </summary>
+    /// <param name="idBook">
+    /// O ID do livro a ser removido.
+    /// </param>
+    private async Task RemoveBook(int idBook)
+    {
+        try
+        {
+            await Operation.RemoveBookAsync(idBook);
+            
+            _message = $"Livro {_book?.Title} removido com sucesso!";
+            _success = true;
+            
+            await Task.Delay(2000);
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception error)
+        {
+            _message = $"Erro ao remover o livro {_book?.Title}. " +
+                       $"Erro: {error.Message}";
+            _success = false;
+        }
+        finally
+        {
+            _message = string.Empty;
+            StateHasChanged();
+        }
+    }
+}
+

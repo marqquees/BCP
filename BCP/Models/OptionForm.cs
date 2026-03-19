@@ -1,12 +1,26 @@
 ﻿namespace BCP.Models
 {
-    public class OptionForm
+    public static class OptionForm
     {
-        public static readonly IReadOnlyList<string> Language = ["Português", "Inglês", "Espanhol", "Francês", "Alemão", "Italiano"];
-        public static readonly IReadOnlyList<string> Format = ["Físico", "Fotocópia", "PDF", "DOCX", "Ebook", "EPUB"];
+        /// <summary>
+        /// Lista de opções para o campo "Formato" do formulário de cadastro de livros.
+        /// </summary>
+        public static readonly IReadOnlyList<string> Format = [
+            "Fotocópia", 
+            "Físico", 
+            ".pdf", 
+            ".docx", 
+            "Ebook", 
+            ".epub"
+        ];
 
+        /// <summary>
+        /// Lista de opções para o campo "Género" do formulário de cadastro de livros.
+        /// </summary>
         public static readonly IReadOnlyList<string> Gender =
         [
+            "Outro",
+            "Artigo Científico",
             "Ficção",
             "Biografia",
             "Didático",
@@ -17,7 +31,18 @@
             "Religião",
             "Romance",
             "Tese",
-            "Outros"
+            "Revista"
+        ];
+        
+        /// <summary>
+        /// Lista de opções para o campo "Proprietário" do formulário de cadastro de livros.
+        /// </summary>
+        public static readonly IReadOnlyList<string> Owner =
+        [
+            "Luís Ricardo Pereira",
+            "Paulinha Pereira",
+            "Ana Luísa Marques",
+            "Daniel Marques"
         ];
     }
 }

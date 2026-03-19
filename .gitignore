@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Some JSON files can contain sensitive information such as connection strings, API keys, etc. 
+*.json
