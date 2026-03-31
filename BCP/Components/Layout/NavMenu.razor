@@ -1,31 +1,25 @@
-﻿<div class="top-row navbar navbar-dark ps-1">
+﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand">Biblioteca Carvalho Pereira</a>
+        <a class="navbar-brand" href="/">Biblioteca Carvalho Pereira</a>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
+<input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/adicionar-livro" Match="NavLinkMatch.All">
-                Adicionar Livro
+            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                Catálogo
             </NavLink>
         </div>
-
+        
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/">
-                Catálogo
+            <NavLink class="nav-link" href="/adicionar_livro">
+                Adicionar Livro
             </NavLink>
         </div>
     </nav>
 </div>
 
-@code {
-    private bool _collapseNavMenu = true;
-    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
-    
-    private void ToggleNavMenu()
-    {
-        _collapseNavMenu = !_collapseNavMenu;
-    }
-}
+

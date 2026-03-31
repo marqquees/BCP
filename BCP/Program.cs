@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona serviços ao container.
-builder.Services.AddRazorComponents().
-    AddInteractiveServerComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.AddDbContext<BookContext>(option =>
-option.UseSqlite("Data Source=./bcp.db"));
+    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
@@ -24,15 +23,11 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-// Configura o pipeline de solicitações HTTP.
+// Configura o pipeline HTTP.
 if (!app.Environment.IsDevelopment())
     app.UseHsts();
 
-app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
-
-app.MapRazorComponents<App>().
-    AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.Run();

@@ -2,7 +2,6 @@
 using BCP.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Data.Common;
 
 namespace BCP.Services
 {
@@ -11,6 +10,25 @@ namespace BCP.Services
         private readonly BookContext _context = context;
         private readonly ILogger<BookOperation> _logger = logger;
 
+        /// <summary>
+        /// Recupera a lista de livros do catálogo.
+        /// </summary>
+        /// <returns>
+        /// Uma lista de livros do catálogo ou uma lista vazia se ocorrer um erro durante a recuperação dos dados.
+        /// </returns>
+        public async Task<List<Book>> ListBookAsync()
+        {
+            try
+            {
+                return await _context.Books.ToListAsync();
+            }
+            catch (Exception error)
+            {
+                _logger.LogError(error, "Erro ao carregar a lista do catálogo dos livros.");
+                throw;
+            }
+        }
+        
         /// <summary>
         /// Adiciona um novo livro ao catálogo.
         /// Se o livro já tiver um ISBN definido,
@@ -21,7 +39,7 @@ namespace BCP.Services
         /// O livro a ser adicionado ao catálogo.
         /// </param>
         /// <returns>
-        /// O livro adicionado ao catálogo ou o livro original se ocorrer um erro durante a adição.
+        /// O livro adicionado ao catálogo ou o livro original se ocorrer um erro durante a adição dos dados.
         /// </returns>
         /// <exception cref="InvalidOperationException">
         /// Lançada quando um livro com o mesmo ISBN já existe no catálogo.
@@ -30,42 +48,24 @@ namespace BCP.Services
         {
             try
             {
-                EntityEntry<Book> b = await _context.Books.AddAsync(book);
-                
-                if (book.ISBN is not null)
+                if (!string.IsNullOrEmpty(book.ISBN))
                 {
-                    bool existsIsbn = await _context.Books.AnyAsync(l => l.ISBN == book.ISBN);
-                    if (existsIsbn) 
+                    bool isbnExists = await _context.Books.AnyAsync(b => b.ISBN == book.ISBN);
+                    if (isbnExists)
                         throw new InvalidOperationException($"O livro com ISBN {book.ISBN} já existe no catálogo.");
                 }
                 
+                // Se a edição do livro for nula, atribui o valor 1.
+                book.Edition ??= 1;
+                
+                EntityEntry<Book> b = await _context.Books.AddAsync(book);
                 await _context.SaveChangesAsync();
-
                 return b.Entity;
             }
-            catch (DbException error)
+            catch (DbUpdateException error)
             {
                 _logger.LogError(error, "Erro ao adicionar o livro {TitleBook}.", book.Title);
-                return book;
-            }
-        }
-
-        /// <summary>
-        /// Recupera uma lista de todos os livros disponíveis no catálogo.
-        /// </summary>
-        /// <returns>
-        /// Uma lista de livros disponíveis no catálogo ou uma lista vazia se ocorrer um erro durante a recuperação dos dados.
-        /// </returns>
-        public async Task<List<Book>> ListBookAsync()
-        {
-            try
-            {
-                return await _context.Books.ToListAsync();
-            }
-            catch (DbException error)
-            {
-                _logger.LogError(error, "Erro ao carregar a lista do catálogo dos livros.");
-                return [];
+                throw;
             }
         }
 
@@ -84,22 +84,22 @@ namespace BCP.Services
             try
             {
                 // Verificar se a entidade já está sendo rastreada.
-                EntityEntry? trackedEntity = _context.ChangeTracker.Entries<Book>()
-                    .FirstOrDefault(e => e.Entity.Id == book.Id);
-
+                EntityEntry? trackedBook = _context.ChangeTracker.Entries<Book>()
+                    .FirstOrDefault(b => b.Entity.Id == book.Id);
+                
                 // Se a entidade já está sendo rastreada, atualiza os valores.
-                if (trackedEntity != null)
-                    _context.Entry(trackedEntity.Entity).CurrentValues.SetValues(book);
+                if (trackedBook != null)
+                    _context.Entry(trackedBook.Entity).CurrentValues.SetValues(book);
                 else
                     _context.Books.Update(book);
 
                 await _context.SaveChangesAsync();
                 return book;
             }
-            catch (DbException error)
+            catch (Exception error)
             {
                 _logger.LogError(error, "Erro ao atualizar o livro {TitleBook}.", book.Title);
-                return book;
+                throw;
             }
         }
 
@@ -110,18 +110,19 @@ namespace BCP.Services
         /// O ID do livro a ser buscado no catálogo.
         /// </param>
         /// <returns>
-        /// O livro encontrado no catálogo ou nulo (null) se o livro não for encontrado ou ocorrer um erro durante a busca.
+        /// O livro encontrado no catálogo ou null se o livro não for encontrado
+        /// ou ocorrer um erro durante a busca dos dados.
         /// </returns>
         public async Task<Book?> FindBookByIdAsync(int idBook)
         {
             try
             {
-                return await _context.Books.AsNoTracking().FirstOrDefaultAsync(l => l.Id == idBook);
+                return await _context.Books.AsNoTracking().FirstOrDefaultAsync(b => b.Id == idBook);
             }
-            catch (DbException error)
+            catch (Exception error)
             {
                 _logger.LogError(error, "Erro ao buscar o livro com ID: {IdBook}.", idBook);
-                return null;
+                throw;
             }
         }
 
@@ -132,7 +133,8 @@ namespace BCP.Services
         /// O ID do livro a ser removido do catálogo.
         /// </param>
         /// <returns>
-        /// true se o livro foi removido com sucesso do catálogo e false se o livro não for encontrado ou ocorrer um erro durante a remoção dos dados.
+        /// true se o livro foi removido com sucesso do catálogo e false se o livro não for encontrado
+        /// ou ocorrer um erro durante a remoção dos dados.
         /// </returns>
         public async Task<bool> RemoveBookAsync(int idBook)
         {
@@ -140,17 +142,16 @@ namespace BCP.Services
             {
                 // Verifica se o livro existe antes de tentar removê-lo.
                 Book? book = await _context.Books.FindAsync(idBook);
-
                 if (book is null) return false;
                 
                 _context.Books.Remove(book);
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (DbException error)
+            catch (Exception error)
             {
                 _logger.LogError(error, "Erro ao remover o livro com o ID: {IdBook}.", idBook);
-                return false;
+                throw;
             }
         }
         
@@ -167,19 +168,16 @@ namespace BCP.Services
         /// Uma lista de livros que correspondem ao termo de pesquisa ou
         /// a lista original de livros se o termo de pesquisa for nulo, vazio ou contiver apenas espaços em branco.
         /// </returns>
-        public static List<Book> FilterBook(IEnumerable<Book> books, string? searchTerm)
+        public List<Book> FilterBook(IEnumerable<Book> books, string? searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return books.ToList();
 
-            return books
-                .Where(book =>
+            return books .Where(book => 
                     book.Title?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
                     book.Author?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
                     book.Subject?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
-                    book.Gender?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true
-                )
-                .ToList();
+                    book.Gender?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ).ToList();
         }
     }
 }

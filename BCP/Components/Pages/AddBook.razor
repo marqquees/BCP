@@ -1,4 +1,4 @@
-﻿@page "/adicionar-livro"
+﻿@page "/adicionar_livro"
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -12,17 +12,15 @@
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-12">
-            <EditForm Model="_book" OnValidSubmit="SubmitAddBook" FormName="addBookForm" class="needs-validation">
+            <EditForm Model="_book" OnValidSubmit="SubmitBook" class="needs-validation">
                 <DataAnnotationsValidator />
-
                 <Form Book="_book"></Form>
-                    
+                
                 <!-- Seção: Botões de Ação -->
                 <div class="d-flex gap-2 justify-content-end">
-                        
-                    <!-- Limpar os Dados -->
+                    <!-- Limpar os Dados do Formulário -->
                     <button type="button" class="btn btn-outline-secondary" @onclick="ClearFormData">
-                        <i class="bi bi-x-circle"></i> Limpar os Dados do Formulário
+                        Limpar
                     </button>
 
                     <!-- Adicionar -->
@@ -35,7 +33,7 @@
     </div>
 </div>
 
-<InfoModal Message="@_message" Success="@_success" />
+<FeedbackToast Message="@_message" Success="@_success" />
 
 @code {
     private Book _book = new();
@@ -47,31 +45,26 @@
     /// Ele tenta adicionar o livro usando a operação fornecida e captura quaisquer erros que possam ocorrer,
     /// exibindo mensagens apropriadas para o usuário.
     /// </summary>
-    private async Task SubmitAddBook()
+    private async Task SubmitBook()
     {
         try
         {
             await Operation.AddBookAsync(_book);
 
-            _message = "Adicionado!";
+            _message = "Livro adicionado!";
             _success = true;
+            StateHasChanged();
         }
         catch (InvalidOperationException error)
         {
-            _message = $"{error.Message}";
+            _message = error.Message;
             _success = false;
         }
-        catch (Exception error)
+        catch
         {
-            _message = $"Erro ao adicionar o livro  {_book.Title} ao Catálogo." +
-                       $"\n Erro: {error.Message}";
+            _message = "Ocorreu um erro inesperado. Tente novamente.";
             _success = false;
         }
-        finally
-        {
-            StateHasChanged();
-            _message = string.Empty;
-        }    
     }
     
     /// <summary>

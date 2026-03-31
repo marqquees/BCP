@@ -19,19 +19,16 @@
         /// </summary>
         public static readonly IReadOnlyList<string> Gender =
         [
-            "Outro",
-            "Artigo Científico",
-            "Ficção",
-            "Biografia",
-            "Didático",
-            "Ensaio",
-            "Poesia",
-            "Teatro",
-            "Autoajuda",
-            "Religião",
-            "Romance",
-            "Tese",
-            "Revista"
+            "Generalidades",
+            "Filosofia e Psicologia",
+            "Religião e Teologia",
+            "Ciências Sociais",
+            "Língua e Linguística",
+            "Ciências Naturais e Matemática",
+            "Tecnologia e Ciências Aplicadas",
+            "Artes, Desporto e Lazer",
+            "Literatura",
+            "História e Geografia Humana"
         ];
         
         /// <summary>
@@ -40,7 +37,7 @@
         public static readonly IReadOnlyList<string> Owner =
         [
             "Luís Ricardo Pereira",
-            "Paulinha Pereira",
+            "Maria Paula Pereira",
             "Ana Luísa Marques",
             "Daniel Marques"
         ];

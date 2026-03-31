@@ -6,32 +6,32 @@
         <h5 class="mb-0">Informações Básicas</h5>
     </div>
     <div class="card-body">
-        <div class="row g-4">
-            
+        <div class="row g-3">
             <!-- Título -->
-            <div class="col-12 col-md-8">
+            <div class="col-sm-7">
                 <label class="form-label fw-bolder">Título</label>
                 <InputText @bind-Value="Book.Title" class="form-control"/>
-                <ValidationMessage For="@(() => Book.Title)" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Title)" class="text-danger small mt-1"/>
             </div>
 
             <!-- ISBN -->
-            <div class="col-12 col-md-2">
+            <div class="col-sm-3">
                 <label class="form-label fw-bolder">ISBN</label>
-                <InputText @bind-Value="Book.ISBN" class="form-control" placeholder="9780000000000"/>
-                <ValidationMessage For="() => Book.ISBN" class="text-danger small"/>
+                <InputText @bind-Value="Book.ISBN" class="form-control" placeholder="9789890000000"/>
+                <ValidationMessage For="@(() => Book.ISBN)" class="text-danger small mt-1"/>
             </div>
 
             <!-- Formato -->
-            <div class="col-12 col-md-2">
+            <div class="col-sm-2">
                 <label class="form-label fw-bolder">Formato</label>
                 <InputSelect @bind-Value="Book.Format" class="form-select">
+                    <option>Selecione...</option>
                     @foreach (var format in OptionForm.Format)
                     {
                         <option value="@format">@format</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="() => Book.Format" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Format)" class="text-danger small mt-1"/>
             </div>
         </div>
     </div>
@@ -43,32 +43,32 @@
         <h5 class="mb-0">Autoria e Classificação</h5>
     </div>
     <div class="card-body">
-        <div class="row g-4">
-            
+        <div class="row g-3">
             <!-- Autor -->
-            <div class="col-12 col-md-5">
+            <div class="col-sm-5">
                 <label class="form-label fw-bolder">Autor</label>
                 <InputText @bind-Value="Book.Author" class="form-control"/>
-                <ValidationMessage For="@(() => Book.Author)" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Author)" class="text-danger small mt-1"/>
             </div>
 
             <!-- Assunto -->
-            <div class="col-12 col-md-5">
+            <div class="col-sm">
                 <label class="form-label fw-bolder">Assunto</label>
                 <InputText @bind-Value="Book.Subject" class="form-control"/>
-                <ValidationMessage For="() => Book.Subject" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Subject)" class="text-danger small mt-1"/>
             </div>
 
             <!-- Género -->
-            <div class="col-12 col-md-2">
+            <div class="col-sm-auto">
                 <label class="form-label fw-bolder">Género</label>
                 <InputSelect @bind-Value="Book.Gender" class="form-select">
+                    <option>Selecione...</option>
                     @foreach (var gender in OptionForm.Gender)
                     {
                         <option value="@gender">@gender</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="() => Book.Gender" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Gender)" class="text-danger small mt-1"/>
             </div>
         </div>
     </div>
@@ -80,66 +80,67 @@
         <h5 class="mb-0">Dados de Publicação</h5>
     </div>
     <div class="card-body">
-        <div class="row g-4">
-            
+        <div class="row g-3">
             <!-- Editora -->
-            <div class="col-12 col-md-8">
+            <div class="col-sm-7">
                 <label class="form-label fw-bolder">Editora</label>
                 <InputText @bind-Value="Book.Publisher" class="form-control"/>
-                <ValidationMessage For="() => Book.Publisher" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Publisher)" class="text-danger small mt-1"/>
             </div>
             
             <!-- Edição -->
-            <div class="col-6 col-md-2">
+            <div class="col-sm">
                 <label class="form-label fw-bolder">Edição</label>
                 <InputNumber @bind-Value="Book.Edition" class="form-control" min="1"/>
-                <ValidationMessage For="() => Book.Edition" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Edition)" class="text-danger small mt-1"/>
             </div>
             
             <!-- Ano de Publicação -->
-            <div class="col-6 col-md-2">
+            <div class="col-sm">
                 <label class="form-label fw-bolder">Ano de Publicação</label>
-                <InputText @bind-Value="Book.PublicationYear" class="form-control"/>
-                <ValidationMessage For="() => Book.PublicationYear" class="text-danger small"/>
+                <InputText @bind-Value="Book.PublicationYear" class="form-control" placeholder="1997"/>
+                <ValidationMessage For="@(() => Book.PublicationYear)" class="text-danger small mt-1"/>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Secção: Descrição, Observação e Proprietário -->
+<!-- Secção: Descrição, Observação e Propriedade -->
 <div class="card mb-4">
     <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0">Descrição e Observação</h5>
+        <h5 class="mb-0">Descrição, Observação e Propriedade</h5>
     </div>
     <div class="card-body">
-        <div class="row g-4">
-            
+        <div class="row g-3">
             <!-- Descrição -->
-            <div class="col-12">
+            <div class="col-sm-12">
                 <label class="form-label fw-bolder">Descrição</label>
-                <InputTextArea @bind-Value="Book.Description" class="form-control" rows="5" 
+                <InputTextArea @bind-Value="Book.Description" 
+                               class="form-control" rows="2" 
                                placeholder="Descrição do conteúdo do livro..."/>
-                <ValidationMessage For="() => Book.Description" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Description)" class="text-danger small mt-1"/>
             </div>
 
             <!-- Observação -->
-            <div class="col-12">
+            <div class="col-sm-12">
                 <label class="form-label fw-bolder">Observação</label>
-                <InputTextArea @bind-Value="Book.Note" class="form-control" rows="3"
+                <InputTextArea @bind-Value="Book.Note" 
+                               class="form-control" rows="2"
                                placeholder="Observação adicional, estado do livro, entre outros..."/>
-                <ValidationMessage For="() => Book.Note" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Note)" class="text-danger small mt-1"/>
             </div>
 
-            <!-- Proprietário -->
-            <div class="col-2 col-md-2">
-                <label class="form-label fw-bolder">Proprietário</label>
+            <!-- Propriedade -->
+            <div class="col-sm-auto">
+                <label class="form-label fw-bolder">Propriedade</label>
                 <InputSelect @bind-Value="Book.Owner" class="form-select">
-                    @foreach(var owner in OptionForm.Owner)
+                    <option>Selecione...</option>
+                    @foreach (var owner in OptionForm.Owner)
                     {
                         <option value="@owner">@owner</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="() => Book.Owner" class="text-danger small"/>
+                <ValidationMessage For="@(() => Book.Owner)" class="text-danger small mt-1" />
             </div>
         </div>
     </div>

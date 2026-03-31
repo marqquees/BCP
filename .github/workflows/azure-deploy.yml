@@ -1,4 +1,4 @@
-name: Implementar BCP para o Azure
+name: Deploy BCP para o Azure
 
 on:
   push:

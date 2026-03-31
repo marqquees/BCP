@@ -1,10 +1,9 @@
 ﻿@page "/"
-@rendermode InteractiveServer
-
-@using Microsoft.AspNetCore.Components.QuickGrid
 @using BCP.Components.Pages.Share
 @using BCP.Models
 @using BCP.Services
+@using Microsoft.AspNetCore.Components.QuickGrid
+@rendermode InteractiveServer
 
 @inject BookOperation Operation
 
@@ -12,27 +11,26 @@
 
 <div class="container-fluid py-4">
     <div class="card mb-4">
-        <div class="card-header bg-primary text-white d-flex flex-wrap gap-2 justify-content-between align-items-center">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h6 class="mb-0">
                 Livros Catalogados
                 <span class="badge bg-light text-primary ms-1">@_book.Count</span>
             </h6>
 
-            <div class="w-100 w-sm-auto" style="max-width: 300px;">
-                <input type="text" 
-                       class="form-control form-control-sm" 
+            <div>
+                <input type="text"
+                       class="form-control form-control-sm"
                        placeholder="pesquisar..."
-                       @bind-value="_searchTerm" 
-                       @bind-value:event="oninput" 
-                       @onkeyup="FilterBook" />
+                       @bind-value="_searchTerm"
+                       @bind-value:event="oninput"
+                       @onkeyup="FilterBook"/>
             </div>
         </div>
 
-       @if (!_book.Any())
+        @if (!_book.Any())
         {
             <div class="d-flex justify-content-center align-items-center p-4">
                 <div class="alert alert-info d-flex gap-2 mb-0" role="alert">
-                    <i class="bi bi-info-circle-fill"></i>
                     <span>Nenhum livro catalogado.</span>
                 </div>
             </div>
@@ -41,35 +39,36 @@
         {
             <div class="card-body">
                 <div class="table-responsive">
-                    <QuickGrid Items="_filterBook.AsQueryable()" Pagination="_pagination" Class="table table-hover align-middle" 
-                        @key="_filterBook">
-                        <PropertyColumn Property="@(e => e.Title)" Title="Título" Sortable="true" />
-                        <PropertyColumn Property="@(e => e.Author)" Title="Autor" Sortable="true" />
+                    <QuickGrid Items="_filterBook.AsQueryable()" Pagination="_pagination"
+                               Class="table table-hover align-middle">
+                        <PropertyColumn Property="@(e => e.Title)" Title="Título" Sortable="true"/>
+                        <PropertyColumn Property="@(e => e.Author)" Title="Autor" Sortable="true"/>
                         <PropertyColumn Property="@(e => e.Subject)" Title="Assunto" Sortable="true"/>
                         <PropertyColumn Property="@(e => e.Gender)" Title="Género" Sortable="true"/>
-                        <TemplateColumn Title="Ações" Align="Align.Right">
-                            <a href="/detalhes/@context.Id" class="btn btn-info btn-sm">
+                        <TemplateColumn Title="Ações">
+                            <a href="/detalhes_livro/@context.Id" class="btn btn-info btn-sm">
                                 Detalhes
                             </a>
                         </TemplateColumn>
                     </QuickGrid>
+                    <Paginator State="_pagination"/>
                 </div>
-                <Paginator State="_pagination"/>
             </div>
         }
     </div>
 </div>
 
-<InfoModal Message="@_message" Success="@_success"/>
+<FeedbackToast Message="@_message" Success="@_success"/>
+
 
 @code {
-    private readonly PaginationState _pagination = new () { ItemsPerPage = 20 };
     private List<Book> _book = [];
     private List<Book> _filterBook = [];
-    private string? _message;
     private string? _searchTerm;
+    private string? _message;
     private bool _success;
-    
+    private readonly PaginationState _pagination = new() { ItemsPerPage = 20 };
+
     /// <summary>
     /// Carrega a lista de livros do catálogo ao inicializar a página/componente.
     /// </summary>
@@ -78,18 +77,13 @@
         try
         {
             _filterBook = _book = await Operation.ListBookAsync();
-            _success = true;
         }
-        catch (Exception error)
+        catch
         {
-            _message = $"Erro ao carregar a lista do(s) livro(s) do catálogo. " +
-                       $"\nErro: {error.Message}";
+            _message = "Não foi possível carregar a lista de livros.";
             _success = false;
-        }
-        finally
-        {
-            _message = string.Empty;
-            StateHasChanged();
+            _book = [];
+            _filterBook = [];
         }
     }
     
@@ -99,6 +93,6 @@
     /// </summary>
     private void FilterBook()
     {
-        _filterBook = BookOperation.FilterBook(_book, _searchTerm);
+        _filterBook = Operation.FilterBook(_book, _searchTerm);
     }
 }

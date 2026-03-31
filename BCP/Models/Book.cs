@@ -9,7 +9,7 @@ namespace BCP.Models
     public class Book
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required(ErrorMessage = "Este campo é obrigatório.")]
         [MaxLength(150, ErrorMessage = "O título deve conter no máximo 150 caracteres.")]
