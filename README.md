@@ -13,11 +13,11 @@ O sistema foca em oferecer uma interface simples e intuitiva com funcionalidades
 
 O projeto está a ser desenvolvido utilizando as seguintes tecnologias:
 
-* **C# 10**
+* **C# 14**
 * **Blazor**
-* **.NET 8**
+* **.NET 10**
 * **Entity Framework**
-* **HTML5 & CSS3**
+* **HTML5 e CSS3**
 * **Bootstrap**
 * **SQLite**
 
