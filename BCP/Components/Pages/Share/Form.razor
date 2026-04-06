@@ -98,17 +98,17 @@
             <!-- Ano de Publicação -->
             <div class="col-sm">
                 <label class="form-label fw-bolder">Ano de Publicação</label>
-                <InputText @bind-Value="Book.PublicationYear" class="form-control" placeholder="1997"/>
+                <InputNumber @bind-Value="Book.PublicationYear" class="form-control" min="1" placeholder="1997"/>
                 <ValidationMessage For="@(() => Book.PublicationYear)" class="text-danger small mt-1"/>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Secção: Descrição, Observação e Propriedade -->
+<!-- Secção: Informações Complementares -->
 <div class="card mb-4">
     <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0">Descrição, Observação e Propriedade</h5>
+        <h5 class="mb-0">Informações Complementares</h5>
     </div>
     <div class="card-body">
         <div class="row g-3">
@@ -124,15 +124,14 @@
             <!-- Observação -->
             <div class="col-sm-12">
                 <label class="form-label fw-bolder">Observação</label>
-                <InputTextArea @bind-Value="Book.Note" 
-                               class="form-control" rows="2"
+                <InputTextArea @bind-Value="Book.Note" class="form-control" rows="2"
                                placeholder="Observação adicional, estado do livro, entre outros..."/>
                 <ValidationMessage For="@(() => Book.Note)" class="text-danger small mt-1"/>
             </div>
 
-            <!-- Propriedade -->
+            <!-- Proprietário -->
             <div class="col-sm-auto">
-                <label class="form-label fw-bolder">Propriedade</label>
+                <label class="form-label fw-bolder">Proprietário</label>
                 <InputSelect @bind-Value="Book.Owner" class="form-select">
                     <option>Selecione...</option>
                     @foreach (var owner in OptionForm.Owner)

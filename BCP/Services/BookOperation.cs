@@ -78,7 +78,7 @@ namespace BCP.Services
         /// </param>
         /// <returns>
         /// O livro atualizado no catálogo ou o livro original se ocorrer um erro durante a atualização dos dados.
-        /// </returns>
+        /// </returns> 
         public async Task<Book> UpdateDataBookAsync(Book book)
         {
             try
@@ -153,31 +153,6 @@ namespace BCP.Services
                 _logger.LogError(error, "Erro ao remover o livro com o ID: {IdBook}.", idBook);
                 throw;
             }
-        }
-        
-        /// <summary>
-        /// Filtra a lista de livros com base em um termo de pesquisa.
-        /// </summary>
-        /// <param name="books">
-        /// A coleção de livros a ser filtrada.
-        /// </param>
-        /// <param name="searchTerm">
-        /// O termo de pesquisa usado para filtrar os livros.
-        /// </param>
-        /// <returns>
-        /// Uma lista de livros que correspondem ao termo de pesquisa ou
-        /// a lista original de livros se o termo de pesquisa for nulo, vazio ou contiver apenas espaços em branco.
-        /// </returns>
-        public List<Book> FilterBook(IEnumerable<Book> books, string? searchTerm)
-        {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return books.ToList();
-
-            return books .Where(book => 
-                    book.Title?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
-                    book.Author?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
-                    book.Subject?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
-                    book.Gender?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true ).ToList();
         }
     }
 }

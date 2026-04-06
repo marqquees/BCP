@@ -12,28 +12,25 @@
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-12">
-            <EditForm Model="_book" OnValidSubmit="SubmitBook" class="needs-validation">
+            <EditForm Model="@_book" OnValidSubmit="@SubmitBook" class="needs-validation">
                 <DataAnnotationsValidator />
-                <Form Book="_book"></Form>
+                <Form Book="@_book"></Form>
                 
                 <!-- Seção: Botões de Ação -->
                 <div class="d-flex gap-2 justify-content-end">
+                    
                     <!-- Limpar os Dados do Formulário -->
-                    <button type="button" class="btn btn-outline-secondary" @onclick="ClearFormData">
-                        Limpar
-                    </button>
+                    <button type="button" class="btn btn-outline-secondary" @onclick="ClearFormData">Limpar</button>
 
                     <!-- Adicionar -->
-                    <button type="submit" class="btn btn-primary">
-                        Adicionar
-                    </button>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
                 </div>
             </EditForm>
         </div>
     </div>
 </div>
 
-<FeedbackToast Message="@_message" Success="@_success" />
+<FeedbackToast Success="@_success" Message="@_message" />
 
 @code {
     private Book _book = new();
@@ -51,20 +48,22 @@
         {
             await Operation.AddBookAsync(_book);
 
-            _message = "Livro adicionado!";
             _success = true;
-            StateHasChanged();
+            _message = "Livro adicionado!";
+            
+            ClearFormData();
         }
         catch (InvalidOperationException error)
         {
-            _message = error.Message;
             _success = false;
+            _message = error.Message;
         }
         catch
         {
+            _success = false;   
             _message = "Ocorreu um erro inesperado. Tente novamente.";
-            _success = false;
         }
+        
     }
     
     /// <summary>

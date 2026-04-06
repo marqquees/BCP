@@ -2,7 +2,7 @@
 
 ## 📋 Sobre o Projeto
 
-O **BCP** é uma aplicação web desenvolvida em **.NET (C#)** e **Blazor**, projetada para gerir os dados do catálogo de livros em uma biblioteca residêncial. 
+O **BCP** é uma aplicação web desenvolvida em **.NET (C#)** e **Blazor**, projetada para gerir os dados do catálogo de livros em uma biblioteca residencial. 
 O sistema foca em oferecer uma interface simples e intuitiva com funcionalidades essenciais para administrar a sua biblioteca na sua moradia.
 
 ## 🚀 Funcionalidades Principais
@@ -16,7 +16,7 @@ O projeto está a ser desenvolvido utilizando as seguintes tecnologias:
 * **C# 14**
 * **Blazor**
 * **.NET 10**
-* **Entity Framework**
+* **Entity Framework Core**
 * **HTML5 e CSS3**
 * **Bootstrap**
 * **SQLite**

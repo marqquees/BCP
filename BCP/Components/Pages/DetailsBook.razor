@@ -1,4 +1,4 @@
-@page "/detalhes_livro/{Id:int}"
+@page "/dados_livro/{Id:int}"
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -27,23 +27,23 @@
                 <h5 class="mb-0">Informações Básicas</h5>
             </div>
             <div class="card-body">
-                <div class="row g-4">
+                <div class="row g-3">
                     <!-- Título -->
-                    <div class="col-12 col-md-8">
+                    <div class="col-sm-7">
                         <label class="form-label fw-bolder">Título</label>
-                        <p class="form-control-plaintext">@Display(_book?.Title)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Title)</p>
                     </div>
 
                     <!-- ISBN -->
-                    <div class="col-12 col-md-2">
+                    <div class="col-sm-3">
                         <label class="form-label fw-bolder">ISBN</label>
-                        <p class="form-control-plaintext">@Display(_book?.ISBN)</p>
+                        <p class="form-control-plaintext">@_display(_book?.ISBN)</p>
                     </div>
 
                     <!-- Formato -->
-                    <div class="col-12 col-md-2">
+                    <div class="col-sm-2">
                         <label class="form-label fw-bolder">Formato</label>
-                        <p class="form-control-plaintext">@Display(_book?.Format)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Format)</p>
                     </div>
                 </div>
             </div>
@@ -55,23 +55,23 @@
                 <h5 class="mb-0">Autoria e Classificação</h5>
             </div>
             <div class="card-body">
-                <div class="row g-4">
+                <div class="row g-3">
                     <!-- Autor -->
-                    <div class="col-12 col-md-4">
+                    <div class="col-sm-7">
                         <label class="form-label fw-bolder">Autor</label>
-                        <p class="form-control-plaintext">@Display(_book?.Author)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Author)</p>
                     </div>
 
                     <!-- Assunto -->
-                    <div class="col-12 col-md-4">
+                    <div class="col-sm-3">
                         <label class="form-label fw-bolder">Assunto</label>
-                        <p class="form-control-plaintext">@Display(_book?.Subject)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Subject)</p>
                     </div>
 
                     <!-- Género -->
-                    <div class="col-12 col-md-4">
+                    <div class="col-sm-2">
                         <label class="form-label fw-bolder">Género</label>
-                        <p class="form-control-plaintext">@Display(_book?.Gender)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Gender)</p>
                     </div>
                 </div>
             </div>
@@ -83,51 +83,51 @@
                 <h5 class="mb-0">Dados de Publicação</h5>
             </div>
             <div class="card-body">
-                <div class="row g-4">
+                <div class="row g-3">
                     <!-- Editora -->
-                    <div class="col-12 col-md-7">
+                    <div class="col-sm-7">
                         <label class="form-label fw-bolder">Editora</label>
-                        <p class="form-control-plaintext">@Display(_book?.Publisher)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Publisher)</p>
                     </div>
 
                     <!-- Edição -->
-                    <div class="col-6 col-md-2">
+                    <div class="col-sm-3">
                         <label class="form-label fw-bolder">Edição</label>
                         <p class="form-control-plaintext">@_book?.Edition</p>
                     </div>
 
                     <!-- Ano de Publicação -->
-                    <div class="col-6 col-md-3">
+                    <div class="col-sm-2">
                         <label class="form-label fw-bolder">Ano de Publicação</label>
-                        <p class="form-control-plaintext">@Display(_book?.PublicationYear)</p>
+                        <p class="form-control-plaintext">@_book?.PublicationYear</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Secção: Descrição, Observação e Proprietário -->
+        <!-- Secção: Informações Complementares -->
         <div class="card mb-4">
             <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0">Descrição e Observação</h5>
+                <h5 class="mb-0">Informações Complementares</h5>
             </div>
             <div class="card-body">
-                <div class="row g-4">
+                <div class="row g-3">
                     <!-- Descrição -->
-                    <div class="col-12">
+                    <div class="col-sm-12">
                         <label class="form-label fw-bolder">Descrição</label>
-                        <p class="form-control-plaintext">@Display(_book?.Description)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Description)</p>
                     </div>
 
                     <!-- Observação -->
-                    <div class="col-12">
+                    <div class="col-sm-12">
                         <label class="form-label fw-bolder">Observação</label>
-                        <p class="form-control-plaintext">@Display(_book?.Note)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Note)</p>
                     </div>
 
                     <!-- Proprietário -->
-                    <div class="col-12 col-md-2">
+                    <div class="col-sm-auto">
                         <label class="form-label fw-bolder">Proprietário</label>
-                        <p class="form-control-plaintext">@Display(_book?.Owner)</p>
+                        <p class="form-control-plaintext">@_display(_book?.Owner)</p>
                     </div>
                 </div>
             </div>
@@ -135,14 +135,12 @@
 
         <!-- Botões de Ação -->
         <div class="d-flex flex-wrap gap-2 justify-content-end">
+            
             <!-- Editar -->
-            <button type="button" class="btn btn-primary" @onclick="EditBook">
-                Editar
-            </button>
+            <button type="button" class="btn btn-primary" @onclick="EditBook">Editar</button>
 
             <!-- Remover -->
-            <button type="button" class="btn btn-danger"
-                    @onclick="() => _showRemoveConfirmation = true">
+            <button type="button" @onclick="() => _showRemoveConfirmation = true" class="btn btn-danger">
                 Remover
             </button>
         </div>
@@ -153,10 +151,10 @@
 {
     <RemoveConfirmationModal
         RemoveBook="@(() => RemoveBook(Id))"
-        Cancel="@(() => _showRemoveConfirmation = false)" />
+        Cancel="@(() => _showRemoveConfirmation = false)"/>
 }
 
-<FeedbackToast Message="@_message" Success="@_success"/>
+<FeedbackToast Success="@_success" Message="@_message"/>
 
 @code {
     [Parameter] public int Id { get; set; }
@@ -166,7 +164,7 @@
     private bool _success;
     private bool _showRemoveConfirmation;
     
-    private static string Display(string? value) => 
+    private static string _display(string? value) => 
         string.IsNullOrWhiteSpace(value) ? "N/A" : value;
     
     /// <summary>
@@ -210,12 +208,12 @@
             if (!removed)
             {
                 _success = false;
-                _message = $"O livro {_book?.Title} não foi encontrado para remoção.";
+                _message = "Livro não encontrado.";
                 return;
             }
             
             _success = true;
-            _message = $"Livro {_book?.Title} removido!";
+            _message = "Livro removido!";
             await Task.Delay(2000);
             Navigation.NavigateTo("/");
         }

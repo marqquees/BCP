@@ -1,6 +1,6 @@
 @if (!string.IsNullOrEmpty(Message))
 {
-    <div class="toast-container position-fixed bottom-0 justify-content-start p-3">
+    <div class="toast-container position-fixed bottom-0 justify-content-start p-2">
         <div class="toast show @(Success ? "bg-success" : "bg-danger") text-white" role="alert">
             <div class="toast-body">
                 @Message
@@ -10,6 +10,6 @@
 }
 
 @code {
-    [Parameter] public string? Message { get; set; }
     [Parameter] public bool Success { get; set; }
+    [Parameter] public string? Message { get; set; }
 }

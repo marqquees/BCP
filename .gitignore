@@ -261,11 +261,6 @@ UpgradeLog*.htm
 ServiceFabricBackup/
 *.rptproj.bak
 
-# SQL Server files
-*.mdf
-*.ldf
-*.ndf
-
 # Business Intelligence projects
 *.rdl.data
 *.bim.layout
@@ -362,12 +357,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Bases de dados SQLite
+# SQLite files
 *.db
 *.sqlite
 
-# JetBrains Rider / IntelliJ
+# JetBrains Rider
 .idea/
-
-# Ficheiros de Publicação
-publish/

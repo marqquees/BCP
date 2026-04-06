@@ -39,8 +39,8 @@ namespace BCP.Models
         public int? Edition { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório.")]
-        [StringLength(4, ErrorMessage = "O ano de publicação deve conter 4 caracteres.")]
-        public string? PublicationYear { get; set; }
+        [Range(1000, 2100, ErrorMessage = "O ano de publicação deve ser um ano válido e deve conter 4 dígitos.")]
+        public int? PublicationYear { get; set; }
 
         [MaxLength(500, ErrorMessage = "A descrição deve conter no máximo 500 caracteres.")]
         public string? Description { get; set; }
