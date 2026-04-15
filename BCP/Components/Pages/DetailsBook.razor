@@ -11,159 +11,156 @@
 <PageTitle>Detalhes do Livro</PageTitle>
 
 <div class="container-fluid py-4">
-    @if (_book is null)
-    {
-        <div class="d-flex justify-content-center align-items-center p-4">
-            <div class="alert alert-warning d-flex gap-2 mb-0" role="alert">
-                <span>Livro não encontrado.</span>
-            </div>
-        </div>
-    }
-    else
-    {
-        <!-- Secção: Informações Básicas -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Informações Básicas</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <!-- Título -->
-                    <div class="col-sm-7">
-                        <label class="form-label fw-bolder">Título</label>
-                        <p class="form-control-plaintext">@_display(_book?.Title)</p>
-                    </div>
-
-                    <!-- ISBN -->
-                    <div class="col-sm-3">
-                        <label class="form-label fw-bolder">ISBN</label>
-                        <p class="form-control-plaintext">@_display(_book?.ISBN)</p>
-                    </div>
-
-                    <!-- Formato -->
-                    <div class="col-sm-2">
-                        <label class="form-label fw-bolder">Formato</label>
-                        <p class="form-control-plaintext">@_display(_book?.Format)</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-11 col-xl-12">
+            @if (_book is null)
+            {
+                <div class="d-flex justify-content-center align-items-center p-4">
+                    <div class="alert alert-warning d-flex gap-2 mb-0" role="alert">
+                        <span>Livro não encontrado.</span>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Secção: Autoria e Classificação -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">Autoria e Classificação</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <!-- Autor -->
-                    <div class="col-sm-7">
-                        <label class="form-label fw-bolder">Autor</label>
-                        <p class="form-control-plaintext">@_display(_book?.Author)</p>
+            }
+            else
+            {
+                <!-- Secção: Informações Básicas -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Informações Básicas</h5>
                     </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Título -->
+                            <div class="col-sm-7">
+                                <label class="form-label fw-bolder">Título</label>
+                                <p class="form-control-plaintext">@_display(_book?.Title)</p>
+                            </div>
 
-                    <!-- Assunto -->
-                    <div class="col-sm-3">
-                        <label class="form-label fw-bolder">Assunto</label>
-                        <p class="form-control-plaintext">@_display(_book?.Subject)</p>
-                    </div>
+                            <!-- ISBN -->
+                            <div class="col-sm-3">
+                                <label class="form-label fw-bolder">ISBN</label>
+                                <p class="form-control-plaintext">@_display(_book?.ISBN)</p>
+                            </div>
 
-                    <!-- Género -->
-                    <div class="col-sm-2">
-                        <label class="form-label fw-bolder">Género</label>
-                        <p class="form-control-plaintext">@_display(_book?.Gender)</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Secção: Dados de Publicação -->
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Dados de Publicação</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <!-- Editora -->
-                    <div class="col-sm-7">
-                        <label class="form-label fw-bolder">Editora</label>
-                        <p class="form-control-plaintext">@_display(_book?.Publisher)</p>
-                    </div>
-
-                    <!-- Edição -->
-                    <div class="col-sm-3">
-                        <label class="form-label fw-bolder">Edição</label>
-                        <p class="form-control-plaintext">@_book?.Edition</p>
-                    </div>
-
-                    <!-- Ano de Publicação -->
-                    <div class="col-sm-2">
-                        <label class="form-label fw-bolder">Ano de Publicação</label>
-                        <p class="form-control-plaintext">@_book?.PublicationYear</p>
+                            <!-- Formato -->
+                            <div class="col-sm-2">
+                                <label class="form-label fw-bolder">Formato</label>
+                                <p class="form-control-plaintext">@_display(_book?.Format)</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Secção: Informações Complementares -->
-        <div class="card mb-4">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0">Informações Complementares</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <!-- Descrição -->
-                    <div class="col-sm-12">
-                        <label class="form-label fw-bolder">Descrição</label>
-                        <p class="form-control-plaintext">@_display(_book?.Description)</p>
+                <!-- Secção: Autoria e Classificação -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Autoria e Classificação</h5>
                     </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Autor -->
+                            <div class="col-sm-7">
+                                <label class="form-label fw-bolder">Autor</label>
+                                <p class="form-control-plaintext">@_display(_book?.Author)</p>
+                            </div>
 
-                    <!-- Observação -->
-                    <div class="col-sm-12">
-                        <label class="form-label fw-bolder">Observação</label>
-                        <p class="form-control-plaintext">@_display(_book?.Note)</p>
-                    </div>
+                            <!-- Assunto -->
+                            <div class="col-sm-3">
+                                <label class="form-label fw-bolder">Assunto</label>
+                                <p class="form-control-plaintext">@_display(_book?.Subject)</p>
+                            </div>
 
-                    <!-- Proprietário -->
-                    <div class="col-sm-auto">
-                        <label class="form-label fw-bolder">Proprietário</label>
-                        <p class="form-control-plaintext">@_display(_book?.Owner)</p>
+                            <!-- Género -->
+                            <div class="col-sm-2">
+                                <label class="form-label fw-bolder">Género</label>
+                                <p class="form-control-plaintext">@_display(_book?.Gender)</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Botões de Ação -->
-        <div class="d-flex flex-wrap gap-2 justify-content-end">
-            
-            <!-- Editar -->
-            <button type="button" class="btn btn-primary" @onclick="EditBook">Editar</button>
+                <!-- Secção: Dados de Publicação -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Dados de Publicação</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Editora -->
+                            <div class="col-sm-7">
+                                <label class="form-label fw-bolder">Editora</label>
+                                <p class="form-control-plaintext">@_display(_book?.Publisher)</p>
+                            </div>
 
-            <!-- Remover -->
-            <button type="button" @onclick="() => _showRemoveConfirmation = true" class="btn btn-danger">
-                Remover
-            </button>
+                            <!-- Edição -->
+                            <div class="col-sm-3">
+                                <label class="form-label fw-bolder">Edição</label>
+                                <p class="form-control-plaintext">@_book?.Edition</p>
+                            </div>
+
+                            <!-- Ano de Publicação -->
+                            <div class="col-sm-2">
+                                <label class="form-label fw-bolder">Ano de Publicação</label>
+                                <p class="form-control-plaintext">@_book?.PublishedYear</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secção: Informações Complementares -->
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">Informações Complementares</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Descrição -->
+                            <div class="col-sm-12">
+                                <label class="form-label fw-bolder">Descrição</label>
+                                <p class="form-control-plaintext">@_display(_book?.Description)</p>
+                            </div>
+
+                            <!-- Observação -->
+                            <div class="col-sm-12">
+                                <label class="form-label fw-bolder">Observação</label>
+                                <p class="form-control-plaintext">@_display(_book?.Note)</p>
+                            </div>
+
+                            <!-- Proprietário -->
+                            <div class="col-sm-auto">
+                                <label class="form-label fw-bolder">Proprietário</label>
+                                <p class="form-control-plaintext">@_display(_book?.Owner)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <!-- Editar -->
+                    <a href="@($"/editar_livro/{_book?.Id}")" class="btn btn-primary">Editar</a>
+
+                    <!-- Remover -->
+                    <button type="button" class="btn btn-danger" @onclick="() => { _removeConfirmationModal?.Show(); }">
+                        Remover
+                    </button>
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>
 
-@if (_showRemoveConfirmation)
-{
-    <RemoveConfirmationModal
-        RemoveBook="@(() => RemoveBook(Id))"
-        Cancel="@(() => _showRemoveConfirmation = false)"/>
-}
+<RemoveConfirmationModal @ref="_removeConfirmationModal" RemoveBook="@(() => RemoveBook(Id))" />
 
 <FeedbackToast Success="@_success" Message="@_message"/>
 
 @code {
     [Parameter] public int Id { get; set; }
-    
     private Book? _book;
     private string? _message;
     private bool _success;
-    private bool _showRemoveConfirmation;
-    
+    private RemoveConfirmationModal? _removeConfirmationModal;
+
     private static string _display(string? value) => 
         string.IsNullOrWhiteSpace(value) ? "N/A" : value;
     
@@ -185,14 +182,6 @@
     }
     
     /// <summary>
-    /// Navega para a página de edição do livro, passando o ID do livro como parâmetro.
-    /// </summary>
-    private void EditBook()
-    {
-        Navigation.NavigateTo($"/editar_livro/{Id}");
-    }
-    
-    /// <summary>
     /// Remove o livro com o ID fornecido da base de dados.
     /// Se a remoção for bem-sucedida, exibe uma mensagem de sucesso e redireciona para a página inicial após um breve atraso.
     /// Se ocorrer um erro durante a remoção, exibe uma mensagem de erro.
@@ -204,18 +193,20 @@
     {
         try
         {
-            bool removed = await Operation.RemoveBookAsync(idBook);
-            if (!removed)
+            bool removeBook = await Operation.RemoveBookAsync(idBook);
+            if (removeBook)
+            {
+                _success = true;
+                _message = "Livro removido!";
+                
+                await Task.Delay(2000);
+                Navigation.NavigateTo("/");
+            }
+            else
             {
                 _success = false;
                 _message = "Livro não encontrado.";
-                return;
             }
-            
-            _success = true;
-            _message = "Livro removido!";
-            await Task.Delay(2000);
-            Navigation.NavigateTo("/");
         }
         catch
         {
@@ -224,4 +215,3 @@
         }
     }
 }
-

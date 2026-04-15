@@ -3,7 +3,7 @@ using BCP.Data;
 using BCP.Services;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Adiciona serviços ao container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
@@ -14,18 +14,21 @@ builder.Services.AddDbContext<BookContext>(option =>
 // Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
 
-var app = builder.Build();
+// Configura o serviço de injeção de dependência para IsbnLookupService,
+// utilizando HttpClient para realizar as requisições à API externa.
+builder.Services.AddHttpClient<IsbnLookup>();
+
+WebApplication app = builder.Build();
 
 // Aplica as migrações pendentes a base de dados.
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<BookContext>();
+    DbContext db = scope.ServiceProvider.GetRequiredService<BookContext>();
     db.Database.Migrate();
 }
 
 // Configura o pipeline HTTP.
-if (!app.Environment.IsDevelopment())
-    app.UseHsts();
+if (!app.Environment.IsDevelopment()) app.UseHsts();
 
 app.UseStaticFiles();
 app.UseAntiforgery();

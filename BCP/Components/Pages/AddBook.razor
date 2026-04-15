@@ -6,19 +6,44 @@
 @using BCP.Services
 
 @inject BookOperation Operation
+@inject IsbnLookup IsbnLookup
 
 <PageTitle>Adicionar Livro</PageTitle>
 
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-12">
+            <!-- Seção: Preenchimento Automático por ISBN -->
+            <div class="card mb-4">
+                <div class="card-body bg-light">
+                    <label class="form-label fw-bold">Preenchimento Automático</label>
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Insira um ISBN válido para preencher os restantes dados no formulário."
+                               @bind="_book.ISBN"/>
+
+                        <button class="btn btn-secondary" type="button" @onclick="AutoFillByIsbn" disabled="@_isLoading">
+                            @if (_isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            else
+                            {
+                                <span>Consultar ISBN</span>
+                            }
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Secção: Formulário de Adição de Livro -->
             <EditForm Model="@_book" OnValidSubmit="@SubmitBook" class="needs-validation">
-                <DataAnnotationsValidator />
+                <DataAnnotationsValidator/>
                 <Form Book="@_book"></Form>
-                
+
                 <!-- Seção: Botões de Ação -->
                 <div class="d-flex gap-2 justify-content-end">
-                    
                     <!-- Limpar os Dados do Formulário -->
                     <button type="button" class="btn btn-outline-secondary" @onclick="ClearFormData">Limpar</button>
 
@@ -36,7 +61,46 @@
     private Book _book = new();
     private string? _message;
     private bool _success;
+    private bool _isLoading;
+    
+    /// <summary>
+    /// Método para preencher automaticamente os dados do livro com base no ISBN fornecido.
+    /// Ele verifica se o ISBN é válido, tenta buscar os dados usando o serviço de consulta e atualiza o modelo do livro.
+    /// Se o ISBN for inválido ou se os dados não puderem ser encontrados, exibe mensagens de erro apropriadas para o usuário.
+    /// </summary>
+    private async Task AutoFillByIsbn()
+    {
+        if (string.IsNullOrWhiteSpace(_book.ISBN))
+        {
+            _success = false;
+            _message = "Por favor, insira um ISBN válido.";
+            return;
+        }
 
+        try
+        {
+            _isLoading = true;
+            StateHasChanged();
+
+            bool success = await IsbnLookup.FillBookDataFromIsbnAsync(_book);
+            if (!success)
+            {
+                _success = false;
+                _message = "Não foi possível encontrar dados para o ISBN fornecido.";
+            }
+        }
+        catch
+        {
+            _success = false;
+            _message = "Ocorreu um erro ao consultar o ISBN. Tente novamente.";
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+    
     /// <summary>
     /// Método para submeter os dados do formulário de adição de um livro ao catálogo.
     /// Ele tenta adicionar o livro usando a operação fornecida e captura quaisquer erros que possam ocorrer,
@@ -63,7 +127,6 @@
             _success = false;   
             _message = "Ocorreu um erro inesperado. Tente novamente.";
         }
-        
     }
     
     /// <summary>

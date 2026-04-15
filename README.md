@@ -8,6 +8,10 @@ O sistema foca em oferecer uma interface simples e intuitiva com funcionalidades
 ## 🚀 Funcionalidades Principais
 
 * **Gestão de Livros (CRUD):** Adição, listagem, atualização e exclusão dos dados.
+* **Pesquisa:** Permite pesquisar os livros por Título, Autor, Assunto e Género, na caixa de pesquisa, facilitando a localização de obras específicas.
+* **Interface Responsiva:** Desenvolvida com Bootstrap para garantir uma experiência de usuário agradável em dispositivos móveis e desktops.
+* **Preenchimento Automático:** Utiliza duas APIs externas (Google Books e Open Library) para preenchimento automatico de alguns dos dados do livro, 
+como Título, Autor, Editora, entre outros, a partir do ISBN.
 
 ## 🛠️ Tecnologias Utilizadas
 

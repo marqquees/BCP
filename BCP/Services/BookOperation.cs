@@ -5,11 +5,17 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BCP.Services
 {
+    /// <summary>
+    /// A classe BookOperation é responsável por realizar operações relacionadas aos livros do catálogo.
+    /// </summary>
+    /// <param name="context">
+    /// O contexto da base de dados utilizado para acessar e manipular os dados dos livros do catálogo.
+    /// </param>
+    /// <param name="logger">
+    /// O logger utilizado para registrar informações e erros relacionados às operações realizadas com os livros do catálogo.
+    /// </param>
     public class BookOperation(BookContext context, ILogger<BookOperation> logger)
     {
-        private readonly BookContext _context = context;
-        private readonly ILogger<BookOperation> _logger = logger;
-
         /// <summary>
         /// Recupera a lista de livros do catálogo.
         /// </summary>
@@ -20,15 +26,15 @@ namespace BCP.Services
         {
             try
             {
-                return await _context.Books.ToListAsync();
+                return await context.Books.ToListAsync();
             }
             catch (Exception error)
             {
-                _logger.LogError(error, "Erro ao carregar a lista do catálogo dos livros.");
+                logger.LogError(error, "Erro ao carregar a lista do catálogo dos livros.");
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Adiciona um novo livro ao catálogo.
         /// Se o livro já tiver um ISBN definido,
@@ -38,33 +44,29 @@ namespace BCP.Services
         /// <param name="book">
         /// O livro a ser adicionado ao catálogo.
         /// </param>
-        /// <returns>
-        /// O livro adicionado ao catálogo ou o livro original se ocorrer um erro durante a adição dos dados.
-        /// </returns>
         /// <exception cref="InvalidOperationException">
         /// Lançada quando um livro com o mesmo ISBN já existe no catálogo.
         /// </exception>
-        public async Task<Book> AddBookAsync(Book book)
+        public async Task AddBookAsync(Book book)
         {
             try
             {
                 if (!string.IsNullOrEmpty(book.ISBN))
                 {
-                    bool isbnExists = await _context.Books.AnyAsync(b => b.ISBN == book.ISBN);
-                    if (isbnExists)
+                    bool isbnExists = await context.Books.AnyAsync(b => b.ISBN == book.ISBN);
+                    if (isbnExists) 
                         throw new InvalidOperationException($"O livro com ISBN {book.ISBN} já existe no catálogo.");
                 }
                 
-                // Se a edição do livro for nula, atribui o valor 1.
-                book.Edition ??= 1;
+                // Se a edição do livro for 0, define como 1 para garantir que a edição seja um número válido.
+                if (book.Edition is 0) book.Edition = 1;
                 
-                EntityEntry<Book> b = await _context.Books.AddAsync(book);
-                await _context.SaveChangesAsync();
-                return b.Entity;
+                await context.Books.AddAsync(book);
+                await context.SaveChangesAsync();
             }
-            catch (DbUpdateException error)
+            catch (Exception error)
             {
-                _logger.LogError(error, "Erro ao adicionar o livro {TitleBook}.", book.Title);
+                logger.LogError(error, "Erro ao adicionar o livro {TitleBook}.", book.Title);
                 throw;
             }
         }
@@ -76,29 +78,23 @@ namespace BCP.Services
         /// O livro com as informações atualizadas.
         /// O livro deve conter um ID válido para que a atualização seja realizada corretamente.
         /// </param>
-        /// <returns>
-        /// O livro atualizado no catálogo ou o livro original se ocorrer um erro durante a atualização dos dados.
-        /// </returns> 
-        public async Task<Book> UpdateDataBookAsync(Book book)
+        public async Task UpdateDataBookAsync(Book book)
         {
             try
             {
                 // Verificar se a entidade já está sendo rastreada.
-                EntityEntry? trackedBook = _context.ChangeTracker.Entries<Book>()
+                EntityEntry? trackedBook = context.ChangeTracker.Entries<Book>()
                     .FirstOrDefault(b => b.Entity.Id == book.Id);
                 
                 // Se a entidade já está sendo rastreada, atualiza os valores.
-                if (trackedBook != null)
-                    _context.Entry(trackedBook.Entity).CurrentValues.SetValues(book);
-                else
-                    _context.Books.Update(book);
+                if (trackedBook != null) context.Entry(trackedBook.Entity).CurrentValues.SetValues(book);
+                else context.Books.Update(book);
 
-                await _context.SaveChangesAsync();
-                return book;
+                await context.SaveChangesAsync();
             }
             catch (Exception error)
             {
-                _logger.LogError(error, "Erro ao atualizar o livro {TitleBook}.", book.Title);
+                logger.LogError(error, "Erro ao atualizar o livro {TitleBook}.", book.Title);
                 throw;
             }
         }
@@ -117,11 +113,11 @@ namespace BCP.Services
         {
             try
             {
-                return await _context.Books.AsNoTracking().FirstOrDefaultAsync(b => b.Id == idBook);
+                return await context.Books.AsNoTracking().FirstOrDefaultAsync(b => b.Id == idBook);
             }
             catch (Exception error)
             {
-                _logger.LogError(error, "Erro ao buscar o livro com ID: {IdBook}.", idBook);
+                logger.LogError(error, "Erro ao buscar o livro com ID: {IdBook}.", idBook);
                 throw;
             }
         }
@@ -141,16 +137,16 @@ namespace BCP.Services
             try
             {
                 // Verifica se o livro existe antes de tentar removê-lo.
-                Book? book = await _context.Books.FindAsync(idBook);
+                Book? book = await context.Books.FindAsync(idBook);
                 if (book is null) return false;
                 
-                _context.Books.Remove(book);
-                await _context.SaveChangesAsync();
+                context.Books.Remove(book);
+                await context.SaveChangesAsync();
                 return true;
             }
             catch (Exception error)
             {
-                _logger.LogError(error, "Erro ao remover o livro com o ID: {IdBook}.", idBook);
+                logger.LogError(error, "Erro ao remover o livro com o ID: {IdBook}.", idBook);
                 throw;
             }
         }

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BCP.Migrations
 {
     [DbContext(typeof(BookContext))]
-    [Migration("20260406113404_BCP.0.2")]
-    partial class BCP02
+    [Migration("20260422184617_BCP.0.1.1")]
+    partial class BCP011
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.7");
 
             modelBuilder.Entity("BCP.Models.Book", b =>
                 {
@@ -34,30 +34,34 @@ namespace BCP.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Edition")
+                    b.Property<int>("Edition")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Format")
                         .IsRequired()
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Gender")
                         .IsRequired()
+                        .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ISBN")
-                        .HasMaxLength(13)
+                        .HasMaxLength(17)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Note")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Owner")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PublicationYear")
+                    b.Property<int>("PublishedYear")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Publisher")
@@ -66,6 +70,7 @@ namespace BCP.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Subject")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 

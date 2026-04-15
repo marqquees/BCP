@@ -1,5 +1,8 @@
 ﻿namespace BCP.Models
 {
+    /// <summary>
+    /// Classe estática que contém as opções para os campos do formulário de cadastro de livros.
+    /// </summary>
     public static class OptionForm
     {
         /// <summary>
