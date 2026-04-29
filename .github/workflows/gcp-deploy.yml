@@ -1,0 +1,25 @@
+name: Deploy BCP to GCP
+
+on:
+  push:
+    branches: [ master ] 
+        
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+            cd ~/BCP
+            git fetch --all
+            git reset --hard origin/master
+            dotnet publish -c Release -o /var/www/bcp
+            sudo chown -R www-data:www-data /var/www/bcp
+            sudo chmod -R 775 /var/www/bcp
+            systemctl restart bcp

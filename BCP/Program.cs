@@ -8,9 +8,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 // Adiciona serviços ao container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-builder.Services.AddDbContext<BookContext>(option =>
-    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Configura o serviço de injeção de dependência para BookOperation.
 builder.Services.AddScoped<BookOperation>();
 
@@ -18,7 +15,17 @@ builder.Services.AddScoped<BookOperation>();
 // utilizando HttpClient para realizar as requisições à API externa.
 builder.Services.AddHttpClient<IsbnLookup>();
 
+
+builder.Services.AddDbContext<BookContext>(option =>
+    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 WebApplication app = builder.Build();
+
+// Configura o caminho base da aplicação para "/bcp".
+app.UsePathBase("/bcp");
+
+// Configura o pipeline HTTP.
+if (!app.Environment.IsDevelopment()) app.UseHsts();
 
 // Aplica as migrações pendentes a base de dados.
 using (IServiceScope scope = app.Services.CreateScope())
@@ -27,10 +34,8 @@ using (IServiceScope scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-// Configura o pipeline HTTP.
-if (!app.Environment.IsDevelopment()) app.UseHsts();
-
-app.UseStaticFiles();
+app.UseRouting();
 app.UseAntiforgery();
+app.MapStaticAssets();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.Run();
