@@ -1,12 +1,5 @@
-# Ficheiros SQLite 
-*.db
-*.sqlite
-*.db-shm
-*.db-wal
-
 # JetBrains Rider
 .idea/
-*.user
 
 # Pastas de compilação (Build)
 [Bb]in/

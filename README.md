@@ -23,11 +23,11 @@ O projeto está a ser desenvolvido utilizando as seguintes tecnologias:
 * **Entity Framework Core**
 * **HTML5 e CSS3**
 * **Bootstrap**
-* **SQLite**
+* **PostgreSQL**
 
 ## 📝 Licença
 
 Este projeto está sob a licença MIT.
 
 ---
-Desenvolvido por [Daniel Marques](https://www.linkedin.com/in/daniell-marquess/)
+Desenvolvido por [Daniel Marques](https://www.linkedin.com/in/daniell-marquess/).

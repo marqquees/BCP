@@ -15,14 +15,10 @@ builder.Services.AddScoped<BookOperation>();
 // utilizando HttpClient para realizar as requisições à API externa.
 builder.Services.AddHttpClient<IsbnLookup>();
 
-
 builder.Services.AddDbContext<BookContext>(option =>
-    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 WebApplication app = builder.Build();
-
-// Configura o caminho base da aplicação para "/bcp".
-app.UsePathBase("/bcp");
 
 // Configura o pipeline HTTP.
 if (!app.Environment.IsDevelopment()) app.UseHsts();

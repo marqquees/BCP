@@ -99,6 +99,7 @@
             book.Title?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
             book.Author.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
             book.Subject.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            book.Gender.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+            book.Gender.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase)
+        ).ToList();
     }
 }
