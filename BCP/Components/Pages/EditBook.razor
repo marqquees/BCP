@@ -1,4 +1,5 @@
-@page "/editar_livro/{Id:int}"
+@page "/edit_book/{Id:int}"
+
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -22,8 +23,8 @@ else
 {
     <EditForm Model="@_book" OnValidSubmit="@UpdateDataBook" class="needs-validation">
         <DataAnnotationsValidator/>
-        <Form Book="@_book"></Form>
-                    
+        <BookForm Book="@_book"/>
+
         <!-- Botões de Ação -->
         <div class="d-flex flex-wrap gap-2 justify-content-end">
             <!-- Cancelar -->
@@ -62,7 +63,8 @@ else
 
     /// <summary>
     /// Atualiza os dados do livro na base de dados e exibe uma mensagem de sucesso ou erro.
-    /// Se a atualização for bem-sucedida, aguarda um momento e navega de volta para a página inicial. Caso contrário, exibe uma mensagem de erro.
+    /// Se a atualização for bem-sucedida, aguarda um momento e navega de volta para a página inicial.
+    /// Caso contrário, exibe uma mensagem de erro.
     /// </summary>
     private async Task UpdateDataBook()
     {
@@ -73,7 +75,7 @@ else
 
             _success = true;
             _message = "Os dados foram atualizados!";
-            
+
             await Task.Delay(1000);
             Navigation.NavigateTo("/");
         }
@@ -83,4 +85,5 @@ else
             _message = "Não foi possível atualizar os dados.";
         }
     }
+
 }
