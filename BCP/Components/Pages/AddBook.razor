@@ -1,5 +1,6 @@
-﻿@page "/adicionar_livro"
-@rendermode InteractiveServer
+﻿@rendermode InteractiveServer
+
+@page "/add_book"
 
 @using BCP.Components.Pages.Share
 @using BCP.Models
@@ -13,7 +14,7 @@
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-12">
-            <!-- Seção: Preenchimento Automático por ISBN -->
+            <!-- Secção: Preenchimento Automático por ISBN -->
             <div class="card mb-4">
                 <div class="card-body bg-light">
                     <label class="form-label fw-bold">Preenchimento Automático</label>
@@ -36,13 +37,13 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Secção: Formulário de Adição de Livro -->
             <EditForm Model="@_book" OnValidSubmit="@SubmitBook" class="needs-validation">
                 <DataAnnotationsValidator/>
-                <Form Book="@_book"></Form>
+                <BookForm Book="@_book"/>
 
-                <!-- Seção: Botões de Ação -->
+                <!-- Secção: Botões de Ação -->
                 <div class="d-flex gap-2 justify-content-end">
                     <!-- Limpar os Dados do Formulário -->
                     <button type="button" class="btn btn-outline-secondary" @onclick="ClearFormData">Limpar</button>
@@ -55,18 +56,19 @@
     </div>
 </div>
 
-<FeedbackToast Success="@_success" Message="@_message" />
+<FeedbackToast Success="@_success" Message="@_message"/>
 
 @code {
     private Book _book = new();
     private string? _message;
     private bool _success;
     private bool _isLoading;
-    
+
     /// <summary>
     /// Método para preencher automaticamente os dados do livro com base no ISBN fornecido.
     /// Ele verifica se o ISBN é válido, tenta buscar os dados usando o serviço de consulta e atualiza o modelo do livro.
-    /// Se o ISBN for inválido ou se os dados não puderem ser encontrados, exibe mensagens de erro apropriadas para o usuário.
+    /// Se o ISBN for inválido ou se os dados não puderem ser encontrados, exibe mensagens de erro apropriadas para o
+    /// utilizador.
     /// </summary>
     private async Task AutoFillByIsbn()
     {
@@ -82,7 +84,7 @@
             _isLoading = true;
             StateHasChanged();
 
-            bool success = await IsbnLookup.FillBookDataFromIsbnAsync(_book);
+            var success = await IsbnLookup.FillBookDataFromIsbnAsync(_book);
             if (!success)
             {
                 _success = false;
@@ -100,11 +102,11 @@
             StateHasChanged();
         }
     }
-    
+
     /// <summary>
     /// Método para submeter os dados do formulário de adição de um livro ao catálogo.
     /// Ele tenta adicionar o livro usando a operação fornecida e captura quaisquer erros que possam ocorrer,
-    /// exibindo mensagens apropriadas para o usuário.
+    /// exibindo mensagens apropriadas para o utilizador.
     /// </summary>
     private async Task SubmitBook()
     {
@@ -114,7 +116,7 @@
 
             _success = true;
             _message = "Livro adicionado!";
-            
+
             ClearFormData();
         }
         catch (InvalidOperationException error)
@@ -124,14 +126,14 @@
         }
         catch
         {
-            _success = false;   
+            _success = false;
             _message = "Ocorreu um erro inesperado. Tente novamente.";
         }
     }
-    
+
     /// <summary>
     /// Método para limpar os dados do formulário,
-    /// resetando o modelo do livro para um novo objeto vazio e atualizando a interface do usuário.
+    /// restaurando o modelo do livro para um novo objeto vazio e atualizando a interface do utilizador.
     /// </summary>
     private void ClearFormData()
     {
