@@ -1,4 +1,5 @@
 ﻿@page "/"
+
 @rendermode InteractiveServer
 
 @using BCP.Components.Pages.Share
@@ -15,16 +16,16 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h6 class="mb-0">Livros Catalogados</h6>
             <div>
-                <input type="search" 
-                       class="form-control" 
+                <input type="search"
+                       class="form-control"
                        placeholder="pesquisar..."
-                       @bind-value="_searchTerm" 
+                       @bind-value="_searchTerm"
                        @bind-value:event="oninput"
-                       @onkeyup="FilterBook" />
+                       @onkeyup="FilterBook"/>
             </div>
         </div>
 
-        @if (!_book.Any())
+        @if (!_filterBook.Any())
         {
             <div class="d-flex justify-content-center align-items-center p-4">
                 <div class="alert alert-info d-flex gap-2 mb-0">
@@ -36,20 +37,20 @@
         {
             <div class="card-body">
                 <div class="table-responsive">
-                    <QuickGrid 
-                        Items="@_filterBook.AsQueryable()" 
-                        Pagination="@_state" 
+                    <QuickGrid
+                        Items="@_filterBook.AsQueryable()"
+                        Pagination="@_state"
                         Class="table table-borderless align-middle">
-                        <PropertyColumn Property="@(b => b.Title)" Title="Título" Sortable="true" />
-                        <PropertyColumn Property="@(b => b.Author)" Title="Autor" Sortable="true" />
-                        <PropertyColumn Property="@(b => b.Subject)" Title="Assunto" Sortable="true" />
-                        <PropertyColumn Property="@(b => b.Gender)" Title="Género" Sortable="true" />
+                        <PropertyColumn Property="@(b => b.Title)" Title="Título" Sortable="true"/>
+                        <PropertyColumn Property="@(b => b.Author)" Title="Autor" Sortable="true"/>
+                        <PropertyColumn Property="@(b => b.Subject)" Title="Assunto" Sortable="true"/>
+                        <PropertyColumn Property="@(b => b.Gender)" Title="Género" Sortable="true"/>
                         <TemplateColumn>
-                            <a class="btn btn-info btn-sm" href=@($"/dados_livro/{context.Id}")>Detalhes</a>
+                            <a class="btn btn-info btn-sm" href=@($"/book_information/{context.Id}")>Detalhes</a>
                         </TemplateColumn>
                     </QuickGrid>
                 </div>
-                <Paginator State="@_state" />
+                <Paginator State="@_state"/>
             </div>
         }
     </div>
@@ -68,7 +69,7 @@
     /// <summary>
     /// Carrega a lista de livros do catálogo ao inicializar a página/componente.
     /// Tenta obter os dados usando o serviço de operação de livros e, em caso de falha,
-    /// exibe uma mensagem de erro e limpa as listas de livros.
+    ///  exibe uma mensagem de erro e limpa as listas de livros.
     /// </summary>
     protected override async Task OnInitializedAsync()
     {
@@ -82,7 +83,7 @@
             _message = "Não foi possível carregar a lista de livros.";
         }
     }
-    
+
     /// <summary>
     /// Filtra a lista de livros com base no termo de pesquisa atual.
     /// O filtro é aplicado a várias propriedades do livro como Título, Autor, Assunto e Género.
@@ -97,9 +98,10 @@
 
         _filterBook = _book.Where(book =>
             book.Title?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
-            book.Author.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            book.Subject.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            book.Gender.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase)
+            book.Author?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
+            book.Subject?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) == true ||
+            book.Gender?.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) == true
         ).ToList();
     }
+
 }
