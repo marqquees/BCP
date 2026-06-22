@@ -1,5 +1,6 @@
-@page "/dados_livro/{Id:int}"
 @rendermode InteractiveServer
+
+@page "/book_information/{Id:int}"
 
 @using BCP.Components.Pages.Share
 @using BCP.Models
@@ -138,7 +139,7 @@
                 <!-- Botões de Ação -->
                 <div class="d-flex flex-wrap gap-2 justify-content-end">
                     <!-- Editar -->
-                    <a href="@($"/editar_livro/{_book?.Id}")" class="btn btn-primary">Editar</a>
+                    <a href="@($"/edit_book/{_book?.Id}")" class="btn btn-primary">Editar</a>
 
                     <!-- Remover -->
                     <button type="button" class="btn btn-danger" @onclick="() => { _removeConfirmationModal?.Show(); }">
@@ -150,7 +151,7 @@
     </div>
 </div>
 
-<RemoveConfirmationModal @ref="_removeConfirmationModal" RemoveBook="@(() => RemoveBook(Id))" />
+<RemoveConfirmationModal @ref="_removeConfirmationModal" RemoveBook="@(() => RemoveBook(Id))"/>
 
 <FeedbackToast Success="@_success" Message="@_message"/>
 
@@ -161,9 +162,11 @@
     private bool _success;
     private RemoveConfirmationModal? _removeConfirmationModal;
 
-    private static string _display(string? value) => 
-        string.IsNullOrWhiteSpace(value) ? "N/A" : value;
-    
+    private static string _display(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? "N/A" : value;
+    }
+
     /// <summary>
     /// Carrega os detalhes do livro com base no ID fornecido.
     /// Se ocorrer um erro durante a carga, exibe uma mensagem de erro.
@@ -180,10 +183,11 @@
             _success = false;
         }
     }
-    
+
     /// <summary>
     /// Remove o livro com o ID fornecido da base de dados.
-    /// Se a remoção for bem-sucedida, exibe uma mensagem de sucesso e redireciona para a página inicial após um breve atraso.
+    /// Se a remoção for bem-sucedida, exibe uma mensagem de sucesso e redireciona para a página inicial após um breve
+    /// atraso.
     /// Se ocorrer um erro durante a remoção, exibe uma mensagem de erro.
     /// </summary>
     /// <param name="idBook">
@@ -193,13 +197,13 @@
     {
         try
         {
-            bool removeBook = await Operation.RemoveBookAsync(idBook);
+            var removeBook = await Operation.RemoveBookAsync(idBook);
             if (removeBook)
             {
                 _success = true;
                 _message = "Livro removido!";
-                
-                await Task.Delay(2000);
+
+                await Task.Delay(5000);
                 Navigation.NavigateTo("/");
             }
             else
