@@ -28,7 +28,7 @@
                         <label class="form-label fw-bolder">Formato</label>
                         <InputSelect @bind-Value="Book.Format" class="form-select">
                             <option>Selecione...</option>
-                            @foreach (string format in OptionForm.Format)
+                            @foreach (var format in OptionForm.Format)
                             {
                                 <option value="@format">@format</option>
                             }
@@ -65,7 +65,7 @@
                         <label class="form-label fw-bolder">Género</label>
                         <InputSelect @bind-Value="Book.Gender" class="form-select">
                             <option>Selecione...</option>
-                            @foreach (string gender in OptionForm.Gender)
+                            @foreach (var gender in OptionForm.Gender)
                             {
                                 <option value="@gender">@gender</option>
                             }
@@ -139,7 +139,7 @@
                         <label class="form-label fw-bolder">Proprietário</label>
                         <InputSelect @bind-Value="Book.Owner" class="form-select">
                             <option>Selecione...</option>
-                            @foreach (string owner in OptionForm.Owner)
+                            @foreach (var owner in OptionForm.Owner)
                             {
                                 <option value="@owner">@owner</option>
                             }
